@@ -1,0 +1,22 @@
+---
+export const prerender = true;
+import { Image } from "astro:assets";
+
+const { imageUrl } = Astro.props;
+---
+
+<div>
+  <a href="/" class="flex ml-2 md:mr-24">
+    <Image
+      height={5}
+      width={5}
+      class="w-8 h-10 rounded-full mx-2"
+      src={imageUrl}
+      alt="LigthHub Logo"
+    />
+    <span
+      class="hidden md:flex self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white"
+      >LigthHub</span
+    >
+  </a>
+</div>
