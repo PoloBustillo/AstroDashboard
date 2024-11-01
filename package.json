@@ -1,7 +1,24 @@
 {
-  "name": "",
+  "name": "lighthub",
   "type": "module",
   "version": "0.0.1",
+  "description": "Un dashboard para subir recursos de la plataforma de aprendizaje",
+  "keywords": [
+    "tailwind",
+    "tailwind css",
+    "flowbite",
+    "admin dashboard",
+    "dashboard ui",
+    "admin dashboard template",
+    "html",
+    "css",
+    "astro",
+    "astro-theme",
+    "astro-template",
+    "javascript"
+  ],
+  "license": "MIT",
+  "author": "PoloBustillo",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -10,8 +27,18 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^4.16.8",
     "@astrojs/check": "^0.9.4",
+    "@astrojs/netlify": "^5.5.4",
+    "@astrojs/tailwind": "^5.1.2",
+    "astro": "^4.16.8",
+    "flowbite": "^2.5.2",
+    "flowbite-typography": "^1.0.4",
+    "tailwind-scrollbar": "^3.1.0",
+    "tailwindcss": "^3.4.14",
     "typescript": "^5.6.3"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "prettier-plugin-astro": "^0.14.1"
   }
 }
