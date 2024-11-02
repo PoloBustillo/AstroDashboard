@@ -1,5 +1,5 @@
 ---
-// import FooterSidebar from './FooterSidebar.astro';
+import FooterSidebar from "@components/FooterSidebar.astro";
 export const prerender = true;
 import SideBar from "@components/SideBar.astro";
 import LayoutCommon from "./LayoutCommon.astro";
@@ -16,7 +16,7 @@ import NavBarSidebar from "./NavBarSidebar.astro";
     >
       <slot />
 
-      <!-- <FooterSidebar /> -->
+      <FooterSidebar />
     </div>
   </div>
 </LayoutCommon>

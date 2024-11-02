@@ -1,8 +1,7 @@
 ---
 export const prerender = true;
 import { Image } from "astro:assets";
-
-const { imageUrl } = Astro.props;
+import logoImage from "../../public/logoFaro.svg";
 ---
 
 <div>
@@ -11,7 +10,7 @@ const { imageUrl } = Astro.props;
       height={5}
       width={5}
       class="w-8 h-10 rounded-full mx-2"
-      src={imageUrl}
+      src={logoImage}
       alt="LigthHub Logo"
     />
     <span
