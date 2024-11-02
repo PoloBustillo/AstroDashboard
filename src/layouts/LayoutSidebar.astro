@@ -1,12 +1,14 @@
 ---
 // import FooterSidebar from './FooterSidebar.astro';
 export const prerender = true;
+import SideBar from "@components/SideBar.astro";
 import LayoutCommon from "./LayoutCommon.astro";
 import NavBarSidebar from "./NavBarSidebar.astro";
 ---
 
 <LayoutCommon>
   <NavBarSidebar />
+  <SideBar />
   <div class="flex pt-16 overflow-hidden bg-gray-50 dark:bg-gray-900">
     <div
       id="main-content"

@@ -30,6 +30,7 @@
     "@astrojs/check": "^0.9.4",
     "@astrojs/netlify": "^5.5.4",
     "@astrojs/tailwind": "^5.1.2",
+    "@iconify-json/mdi": "^1.2.1",
     "astro": "^4.16.8",
     "astro-icon": "^1.1.1",
     "flowbite": "^2.5.2",
