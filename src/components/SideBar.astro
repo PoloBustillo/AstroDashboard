@@ -1,6 +1,5 @@
 ---
 /* eslint max-lines: 'off' */
-
 import { Icon } from "astro-icon/components";
 const links = [
   {
@@ -19,9 +18,9 @@ const links = [
     icon: "mdi:user-search",
   },
   {
-    href: "/recursos",
+    href: "/protected/recursos",
     text: "Recursos",
-    icon: "mdi:multimedia",
+    icon: "multimedia",
   },
   {
     href: "/auth/sign-in",
@@ -29,9 +28,9 @@ const links = [
     icon: "acceder",
   },
   {
-    href: "/signup",
-    text: "Sign Up",
-    icon: "mdi:account-plus",
+    href: "/auth/sign-up",
+    text: "Crear cuenta",
+    icon: "adduser",
   },
 
   {
@@ -314,16 +313,16 @@ console.log(pathname);
             <ul id="dropdown-auth" class="hidden py-2 space-y-2">
               <li>
                 <a
-                  href={"authentication/sign-in"}
+                  href={"auth/sign-in"}
                   class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
                   >Accede a tu cuenta</a
                 >
               </li>
               <li>
                 <a
-                  href={"authentication/sign-up"}
+                  href={"auth/sign-up"}
                   class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
-                  >Sign up</a
+                  >Crea tu cuenta</a
                 >
               </li>
               <li>
