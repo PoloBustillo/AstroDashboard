@@ -1,18 +1,16 @@
 ---
 import Logo from "./Logo.astro";
-import { getSession } from "auth-astro/server";
-const session = await getSession(Astro.request);
-export const prerender = true;
 ---
 
-<div class="text-white">
-  {session ? <p>Welcome {session.user?.name}</p> : <p>Not logged in</p>}
-</div>
 <script>
   const { signIn, signOut } = await import("auth-astro/client");
   const loginButton = document.querySelector("#login") as HTMLButtonElement;
   if (loginButton) {
     loginButton.onclick = () => signIn("google");
+  }
+  const logoutButton = document.querySelector("#logout") as HTMLButtonElement;
+  if (logoutButton) {
+    logoutButton.onclick = () => signOut();
   }
 </script>
 <div
@@ -99,7 +97,11 @@ export const prerender = true;
         >
       </div>
     </form>
-
+    <button
+      id="logout"
+      class="w-full px-5 py-3 text-base font-medium text-center text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+      >Logout</button
+    >
     <div class="px-6 sm:px-0 max-w-sm">
       <button
         type="button"

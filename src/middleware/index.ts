@@ -1,8 +1,12 @@
 import { defineMiddleware } from "astro:middleware";
+import { getSession } from "auth-astro/server";
 
 export const onRequest = defineMiddleware(async (context, next) => {
-  console.log(context.url.pathname);
-  console.log("Request received");
+  let session = await getSession(context.request);
+  console.log("MIDDLEWARE", session);
+  if (context.url.pathname.includes("sign-in") && session) {
+    return context.redirect("/");
+  }
 
-  next();
+  return next();
 });

@@ -1,67 +1,103 @@
 ---
-const { avatarImage, email } = Astro.props;
+import { getSession } from "auth-astro/server";
+const session = await getSession(Astro.request);
+console.log(session);
 ---
 
+<script>
+  const { signOut } = await import("auth-astro/client");
+  const logOutButton = document.querySelector("#log-out") as HTMLButtonElement;
+  if (logOutButton) {
+    logOutButton.onclick = () => signOut();
+  }
+</script>
+
 <div class="flex items-center ml-3">
-  <div>
-    <button
-      type="button"
-      class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-      id="user-menu-button-2"
-      aria-expanded="false"
-      data-dropdown-toggle="dropdown-2"
-    >
-      <span class="sr-only">Abrir menu de usuario</span>
-      <img
-        class="w-8 h-8 rounded-full"
-        src={avatarImage}
-        alt="foto del usuario"
-      />
-    </button>
-  </div>
-  <!-- Dropdown menu -->
-  <div
-    class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
-    id="dropdown-2"
-  >
-    <div class="px-4 py-3" role="none">
-      <p class="text-sm text-gray-900 dark:text-white" role="none">Neil Sims</p>
-      <p
-        class="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
-        role="none"
+  {
+    session ? (
+      <>
+        <div>
+          <button
+            type="button"
+            class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+            id="user-menu-button-2"
+            aria-expanded="false"
+            data-dropdown-toggle="dropdown-2"
+          >
+            <span class="sr-only">Abrir menu de usuario</span>
+            <img
+              class="w-8 h-8 rounded-full"
+              src={session.user?.image}
+              alt="foto del usuario"
+            />
+          </button>
+        </div>
+
+        <div
+          class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
+          id="dropdown-2"
+        >
+          <div class="px-4 py-3" role="none">
+            <p class="text-sm text-gray-900 dark:text-white" role="none">
+              {session.user?.name}
+            </p>
+            <p
+              class="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
+              role="none"
+            >
+              {session.user?.email}
+            </p>
+          </div>
+          <ul class="py-1" role="none">
+            <li>
+              <a
+                href="#"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                role="menuitem"
+              >
+                Dashboard
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                role="menuitem"
+              >
+                Settings
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                role="menuitem"
+              >
+                Earnings
+              </a>
+            </li>
+            <li>
+              <a
+                id="log-out"
+                href="#"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                role="menuitem"
+              >
+                Salir
+              </a>
+            </li>
+          </ul>
+        </div>
+      </>
+    ) : (
+      <button
+        onclick="window.location.href = '/auth/sign-in'"
+        class="mx-4 inline-flex items-center justify-center p-0.5 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800"
       >
-        {email}
-      </p>
-    </div>
-    <ul class="py-1" role="none">
-      <li>
-        <a
-          href="#"
-          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-          role="menuitem">Dashboard</a
-        >
-      </li>
-      <li>
-        <a
-          href="#"
-          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-          role="menuitem">Settings</a
-        >
-      </li>
-      <li>
-        <a
-          href="#"
-          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-          role="menuitem">Earnings</a
-        >
-      </li>
-      <li>
-        <a
-          href="#"
-          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-          role="menuitem">Sign out</a
-        >
-      </li>
-    </ul>
-  </div>
+        <span class="px-4 py-2 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+          Ingresar
+        </span>
+      </button>
+    )
+  }
 </div>
