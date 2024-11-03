@@ -13,6 +13,10 @@ import Logo from "./Logo.astro";
   const loginGithub = document.querySelector(
     "#loginGithub",
   ) as HTMLButtonElement;
+  const loginX = document.querySelector("#loginX") as HTMLButtonElement;
+  if (loginX) {
+    loginX.onclick = () => signIn("twitter");
+  }
   if (loginGithub) {
     loginGithub.onclick = () => signIn("github");
   }
@@ -191,6 +195,7 @@ import Logo from "./Logo.astro";
         <!-- X -->
         <button
           type="button"
+          id="loginX"
           data-twe-ripple-init
           data-twe-ripple-color="light"
           class="mb-2 inline-block rounded bg-black px-6 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg"
