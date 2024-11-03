@@ -20,14 +20,15 @@
   "license": "MIT",
   "author": "PoloBustillo",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --remote",
     "start": "astro dev",
-    "build": "astro check && astro build",
+    "build": "astro check && astro build --remote",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
+    "@astrojs/db": "^0.14.3",
     "@astrojs/netlify": "^5.5.4",
     "@astrojs/tailwind": "^5.1.2",
     "@auth/core": "^0.32.0",
