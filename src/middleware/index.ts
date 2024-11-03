@@ -8,5 +8,9 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return context.redirect("/");
   }
 
+  if (context.url.pathname.includes("sign-up") && session) {
+    return context.redirect("/");
+  }
+
   return next();
 });
