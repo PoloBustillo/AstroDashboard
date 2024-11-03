@@ -3,18 +3,20 @@ import { Image } from "astro:assets";
 import logoImage from "../../public/logoFaro.svg";
 ---
 
-<div>
-  <a href="/" class="flex ml-2 md:mr-24">
-    <Image
-      height={5}
-      width={5}
-      class="w-8 h-10 rounded-full mx-2"
-      src={logoImage}
-      alt="LigthHub Logo"
-    />
-    <span
-      class="hidden md:flex self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white"
-      >LigthHub</span
-    >
-  </a>
+<div class="w-full">
+  <div class="flex items-center justify-center text-center">
+    <a href="/" class="flex">
+      <Image
+        height={5}
+        width={5}
+        class="w-8 h-10 text-center rounded-full mx-2"
+        src={logoImage}
+        alt="LigthHub Logo"
+      />
+      <span
+        class="hidden text-center md:flex self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white"
+        >LigthHub</span
+      >
+    </a>
+  </div>
 </div>
