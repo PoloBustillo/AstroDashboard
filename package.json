@@ -33,6 +33,7 @@
     "@astrojs/tailwind": "^5.1.2",
     "@auth/core": "^0.32.0",
     "@iconify-json/mdi": "^1.2.1",
+    "@netlify/blobs": "^8.1.0",
     "@types/bcrypt": "^5.0.2",
     "astro": "^4.16.8",
     "astro-auth": "^0.0.1",
