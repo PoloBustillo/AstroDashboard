@@ -3,9 +3,39 @@ import Discord from "@auth/core/providers/discord";
 import GitHub from "@auth/core/providers/github";
 import X from "@auth/core/providers/twitter";
 import { defineConfig } from "auth-astro";
+import Credentials from "@auth/core/providers/credentials";
 
 export default defineConfig({
   providers: [
+    Credentials({
+      credentials: {
+        email: { label: "Correo", type: "email" },
+        password: { label: "Contraseña", type: "password" },
+      },
+      authorize: async ({ email, password }) => {
+        // const [user] = await db
+        //   .select()
+        //   .from(User)
+        //   .where(eq(User.email, `${email}`));
+
+        // if (!user) {
+        //   throw new Error("User not found");
+        // }
+
+        // if (!bcrypt.compareSync(password as string, user.password)) {
+        //   throw new Error("Invalid password");
+        // }
+
+        // const { password: _, ...rest } = user;
+
+        return {
+          name: "Usuario",
+          email: "lol@lol",
+          role: "admin",
+          isActive: true,
+        };
+      },
+    }),
     X({
       clientId: import.meta.env.X_CLIENT_ID,
       clientSecret: import.meta.env.X_CLIENT_SECRET,

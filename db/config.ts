@@ -11,7 +11,21 @@ export const Users = defineTable({
     loggedAt: column.date(),
   },
 });
+
+export const Resources = defineTable({
+  columns: {
+    id: column.number({ primaryKey: true, autoIncrement: true }),
+    user: column.number({ references: () => Users.columns.id }),
+    name: column.text(),
+    url: column.text(),
+    type: column.text(),
+    description: column.text(),
+    isActive: column.boolean(),
+    createdAt: column.date(),
+  },
+});
+
 // https://astro.build/db/config
 export default defineDb({
-  tables: { Users },
+  tables: { Users, Resources },
 });

@@ -4,6 +4,22 @@ import Logo from "./Logo.astro";
 
 <script>
   const { signIn, signOut } = await import("auth-astro/client");
+  const form = document.querySelector("form") as HTMLFormElement;
+  const btnSubmit = document.querySelector("#btn-submit") as HTMLButtonElement;
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    btnSubmit.setAttribute("disabled", "disabled");
+
+    const formData = new FormData(form);
+
+    // const { error } = await actions.loginUser.safe(formData);
+    const resp = await signIn("credentials", {
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
+      redirect: false,
+    });
+  });
   const loginButton = document.querySelector(
     "#loginGoogle",
   ) as HTMLButtonElement;
@@ -102,7 +118,7 @@ import Logo from "./Logo.astro";
       </div>
       <div class="flex justify-around">
         <button
-          id="login"
+          id="btn-submit"
           class="w-full px-5 py-3 text-base font-medium text-center text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
           >Accede</button
         >
