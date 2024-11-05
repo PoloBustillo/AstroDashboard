@@ -32,7 +32,7 @@ export const POST: APIRoute = async ({ params, request }) => {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(output.password, salt);
     const isValid = await compare(existingUser[0].password, hashedPassword);
-    console.log(isValid);
+
     if (!isValid) {
       return res("Password is incorrect", { status: 401 });
     }

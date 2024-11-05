@@ -3,7 +3,7 @@ import { getSession } from "auth-astro/server";
 
 export const onRequest = defineMiddleware(async (context, next) => {
   let session = await getSession(context.request);
-  console.log("MIDDLEWARE", next, context);
+
   if (context.url.pathname.includes("sign-in") && session) {
     let redirectUrl = context.url.searchParams.get("next") || "/";
     return context.redirect(redirectUrl);
