@@ -31,6 +31,7 @@
     "@astrojs/db": "^0.14.3",
     "@astrojs/netlify": "^5.5.4",
     "@astrojs/tailwind": "^5.1.2",
+    "@astrojs/vercel": "^7.8.2",
     "@auth/core": "^0.32.0",
     "@iconify-json/mdi": "^1.2.1",
     "@netlify/blobs": "^8.1.0",
