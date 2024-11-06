@@ -2,166 +2,72 @@
 import LayoutSidebar from "@layouts/LayoutSidebar.astro";
 ---
 
-<LayoutSidebar>
-  <div class="min-h-screen mx-2 align-middle flex pb-[12vh]">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div class="grid gap-4">
-        <div
-          class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
-        >
-          <a href="#">
-            <img
-              class="rounded-t-lg"
-              src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image.jpg"
-              alt=""
-            />
-          </a>
+<script>
+  import Dropzone from "dropzone";
+  console.log("Dropzone", Dropzone);
+  import "dropzone/dist/dropzone.css";
 
-          <div class="p-5">
-            <div class="flex m-auto items-center">
-              <img
-                class="w-10 h-10 rounded-full mr-4"
-                src="/img/jonathan.jpg"
-                alt="Avatar of Jonathan Reinink"
-              />
-              <div class="text-sm">
-                <p class="text-gray-900 leading-none">Jonathan Reinink</p>
-                <p class="text-gray-600">Aug 18</p>
-              </div>
-            </div>
-            <div class="text-gray-900 font-bold text-xl mb-2">
-              Can coffee make you a better developer?
-            </div>
-            <p class="text-gray-700 text-base">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              Voluptatibus quia, nulla! Maiores et perferendis eaque,
-              exercitationem praesentium nihil.
-            </p>
-            <p class="text-sm text-gray-600 flex items-center">
-              <svg
-                class="fill-current text-gray-500 w-3 h-3 mr-2"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z"
-                ></path>
-              </svg>
-              Members only
-            </p>
-            <a
-              href="#"
-              class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+  var myDropzone = new Dropzone("#dropzoneform", {
+    thumbnail: function (file, dataUrl) {
+      if (file.previewElement) {
+        file.previewElement.classList.remove("dz-file-preview");
+        var images = file.previewElement.querySelectorAll(
+          "[data-dz-thumbnail]",
+        );
+        for (var i = 0; i < images.length; i++) {
+          var thumbnailElement = images[i] as HTMLImageElement;
+          thumbnailElement.alt = file.name;
+          thumbnailElement.src = dataUrl;
+        }
+        setTimeout(function () {
+          file.previewElement.classList.add("dz-image-preview");
+        }, 1);
+      }
+    },
+
+    dictCancelUpload: "Cancelar",
+    dictCancelUploadConfirmation:
+      "¿Estás seguro de que quieres cancelar esta carga?",
+    dictDefaultMessage: "Arrastra los archivos aquí para subirlos o haz clic",
+    dictFallbackMessage:
+      "Tu navegador no soporta la carga de archivos con arrastrar y soltar.",
+    dictFallbackText:
+      "Por favor, utiliza el formulario de abajo para subir tus archivos como en los viejos tiempos.",
+    dictFileTooBig:
+      "El archivo es muy grande ({{filesize}}MiB). Tamaño máximo: {{maxFilesize}}MiB.",
+    dictInvalidFileType: "No puedes subir archivos de este tipo.",
+    dictResponseError: "El servidor respondió con el código {{statusCode}}.",
+    dictUploadCanceled: "La carga ha sido cancelada.",
+    dictRemoveFileConfirmation:
+      "¿Estás seguro de que quieres eliminar este archivo?",
+    dictRemoveFile: "Eliminar archivo",
+    dictMaxFilesExceeded: "No puedes subir más archivos.",
+    paramName: "file",
+    maxFiles: 10,
+    maxFilesize: 10, // MB
+    addRemoveLinks: true,
+  });
+  myDropzone.on("removedfile", function (file) {
+    console.log("file removed", file);
+  });
+</script>
+<LayoutSidebar>
+  <div class="bg-white py-24 sm:py-32">
+    <section class="flex justify-center">
+      <div id="dropzone" class="w-[80%]">
+        <form
+          class="dropzone m-auto text-center !border-dotted border !border-sky-500"
+          id="dropzoneform"
+          action="/api/file-upload"
+        >
+          <div class="dz-message needsclick">
+            <h2 class="font-extrabold">Subir archivos o soltar aquí</h2><br />
+            <span class="text-xs"
+              >Archivos aceptados: PDF📑 IMAGES🖼️ TXT📜 AUDIO🎼</span
             >
-              Read more
-              <svg
-                class="rtl:rotate-180 w-3.5 h-3.5 ms-2"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 10"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M1 5h12m0 0L9 1m4 4L9 9"></path>
-              </svg>
-            </a>
           </div>
-        </div>
-        <!-- <div>
-          <img
-            class="h-auto max-w-full rounded-lg"
-            src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image.jpg"
-            alt=""
-          />
-        </div> -->
-        <div>
-          <img
-            class="h-auto max-w-full rounded-lg"
-            src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-1.jpg"
-            alt=""
-          />
-        </div>
-        <div>
-          <img
-            class="h-auto max-w-full rounded-lg"
-            src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-2.jpg"
-            alt=""
-          />
-        </div>
+        </form>
       </div>
-      <div class="grid gap-4">
-        <div>
-          <img
-            class="h-auto max-w-full rounded-lg"
-            src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-3.jpg"
-            alt=""
-          />
-        </div>
-        <div>
-          <img
-            class="h-auto max-w-full rounded-lg"
-            src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-4.jpg"
-            alt=""
-          />
-        </div>
-        <div>
-          <img
-            class="h-auto max-w-full rounded-lg"
-            src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-5.jpg"
-            alt=""
-          />
-        </div>
-      </div>
-      <div class="grid gap-4">
-        <div>
-          <img
-            class="h-auto max-w-full rounded-lg"
-            src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-6.jpg"
-            alt=""
-          />
-        </div>
-        <div>
-          <img
-            class="h-auto max-w-full rounded-lg"
-            src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-7.jpg"
-            alt=""
-          />
-        </div>
-        <div>
-          <img
-            class="h-auto max-w-full rounded-lg"
-            src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-8.jpg"
-            alt=""
-          />
-        </div>
-      </div>
-      <div class="grid gap-4">
-        <div>
-          <img
-            class="h-auto max-w-full rounded-lg"
-            src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-9.jpg"
-            alt=""
-          />
-        </div>
-        <div>
-          <img
-            class="h-auto max-w-full rounded-lg"
-            src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-10.jpg"
-            alt=""
-          />
-        </div>
-        <div>
-          <img
-            class="h-auto max-w-full rounded-lg"
-            src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-11.jpg"
-            alt=""
-          />
-        </div>
-      </div>
-    </div>
+    </section>
   </div>
 </LayoutSidebar>
