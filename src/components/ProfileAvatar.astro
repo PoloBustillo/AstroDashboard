@@ -1,5 +1,6 @@
 ---
 import { getSession } from "auth-astro/server";
+import avatar from "@icons/avatar.svg";
 const session = await getSession(Astro.request);
 ---
 
@@ -18,7 +19,7 @@ const session = await getSession(Astro.request);
         <div>
           <button
             type="button"
-            class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+            class="flex text-sm bg-green-500 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
             id="user-menu-button-2"
             aria-expanded="false"
             data-dropdown-toggle="dropdown-2"
@@ -26,7 +27,7 @@ const session = await getSession(Astro.request);
             <span class="sr-only">Abrir menu de usuario</span>
             <img
               class="w-8 h-8 rounded-full"
-              src={session.user?.image}
+              src={"/avatar.svg"}
               alt="foto del usuario"
             />
           </button>

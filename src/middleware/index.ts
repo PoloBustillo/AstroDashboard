@@ -1,4 +1,3 @@
-import { actions } from "astro:actions";
 import { defineMiddleware } from "astro:middleware";
 import { getSession } from "auth-astro/server";
 
