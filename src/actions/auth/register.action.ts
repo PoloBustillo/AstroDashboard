@@ -1,9 +1,12 @@
+import { AuthError, CallbackRouteError } from "@auth/core/errors";
 import { defineAction } from "astro:actions";
 import { z } from "astro:content";
 import { db, NOW, User } from "astro:db";
+import { AstroAuth } from "auth-astro/server";
 import bcrypt from "bcrypt";
 import type { UserType } from "db/types";
 import { USER_ROLE } from "src/utils/constants";
+import { normalizeError } from "src/utils/methods";
 import { v4 as uuidv4 } from "uuid";
 
 export const registerUser = defineAction({
@@ -48,10 +51,22 @@ export const registerUser = defineAction({
       } as UserType;
 
       const result = await db.insert(User).values(newUser);
+      const { password: _, ...user } = newUser;
       console.log("User created successfully", result);
-    } catch (error) {
+
+      return { message: "Usuario creado exitosamente", user: user };
+    } catch (error: unknown) {
       console.error("Error creating user", error);
-      throw new Error("Error al crear el usuario");
+      const e = normalizeError(error);
+      if (e.message) {
+        throw new Error(e.message);
+      }
+      if (error instanceof AuthError) {
+        throw new CallbackRouteError(error.message);
+      }
+      throw new Error(
+        "Error al crear el usuario: Usuario ya existe o Servicio fuera de linea",
+      );
     }
   },
 });

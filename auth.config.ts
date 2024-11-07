@@ -17,7 +17,6 @@ export default defineConfig({
         password: { label: "Contraseña", type: "password" },
       },
       authorize: async ({ email, password }) => {
-        return null;
         const [user] = await db
           .select()
           .from(User)
