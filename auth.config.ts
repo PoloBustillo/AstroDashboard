@@ -2,8 +2,10 @@ import Google from "@auth/core/providers/google";
 import Discord from "@auth/core/providers/discord";
 import GitHub from "@auth/core/providers/github";
 import X from "@auth/core/providers/twitter";
-import { defineConfig } from "auth-astro";
+
 import Credentials from "@auth/core/providers/credentials";
+import { defineConfig } from "auth-astro";
+import { actions } from "astro:actions";
 
 export default defineConfig({
   providers: [
@@ -30,7 +32,7 @@ export default defineConfig({
 
         return {
           name: "Usuario",
-          email: "lol@lol",
+          email: email as string,
           role: "admin",
           isActive: true,
         };
@@ -54,11 +56,13 @@ export default defineConfig({
     }),
   ],
   callbacks: {
-    async session({ session, token }) {
+    async session({ session, token, user }) {
+      const { data, error } = await actions.isAdmin(
+        session.user.email as string,
+      );
+      if (data?.isAdmin) session.user.role = "admin";
+
       return session;
-    },
-    async jwt({ token, user, account, profile, isNewUser }) {
-      return token;
     },
   },
 });
