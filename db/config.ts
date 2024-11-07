@@ -1,31 +1,50 @@
 import { column, defineDb, defineTable } from "astro:db";
 
-export const Users = defineTable({
+const Role = defineTable({
   columns: {
-    id: column.number({ primaryKey: true, autoIncrement: true }),
+    id: column.text({ primaryKey: true }),
     name: column.text(),
-    email: column.text(),
-    password: column.text(),
-    isActive: column.boolean(),
-    role: column.text(),
-    loggedAt: column.date(),
   },
 });
 
-export const Resources = defineTable({
+const User = defineTable({
   columns: {
-    id: column.number({ primaryKey: true, autoIncrement: true }),
-    user: column.number({ references: () => Users.columns.id }),
+    id: column.text({ primaryKey: true, unique: true }),
     name: column.text(),
-    url: column.text(),
-    type: column.text(),
+    email: column.text({ unique: true }),
+    password: column.text(),
+    isActive: column.boolean(),
+    createdAt: column.date({ default: new Date() }),
+    role: column.text({ references: () => Role.columns.id }), // admin, user, super-user
+  },
+});
+
+export const Blog = defineTable({
+  columns: {
+    id: column.text({ primaryKey: true }),
+    user: column.text({ references: () => User.columns.id }),
+    tags: column.text(),
     description: column.text(),
     isActive: column.boolean(),
-    createdAt: column.date(),
+    title: column.text(),
+    createdAt: column.date({ default: new Date() }),
+  },
+});
+
+const BlogResource = defineTable({
+  columns: {
+    id: column.text({ primaryKey: true }),
+    productId: column.text({ references: () => Blog.columns.id }),
+    url: column.text(),
   },
 });
 
 // https://astro.build/db/config
 export default defineDb({
-  tables: { Users, Resources },
+  tables: {
+    User,
+    Role,
+    Blog,
+    BlogResource,
+  },
 });

@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { db, NOW, Users, eq } from "astro:db";
+import { db, NOW, User, eq } from "astro:db";
 import { res } from "src/utils/methods";
 import bcrypt, { compare } from "bcrypt";
 import { boolean, object, safeParse, string, optional } from "valibot";
@@ -21,8 +21,8 @@ export const POST: APIRoute = async ({ params, request }) => {
 
     const existingUser = await db
       .select()
-      .from(Users)
-      .where(eq(Users.email, output.email))
+      .from(User)
+      .where(eq(User.email, output.email))
       .limit(1);
 
     if (existingUser.length == 0) {

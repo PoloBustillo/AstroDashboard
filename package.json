@@ -20,7 +20,7 @@
   "license": "MIT",
   "author": "PoloBustillo",
   "scripts": {
-    "dev": "astro dev --remote",
+    "dev": "astro dev",
     "start": "astro dev",
     "build": "astro check && astro build --remote",
     "preview": "astro preview",

@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 import Credentials from "@auth/core/providers/credentials";
 import { defineConfig } from "auth-astro";
 import { actions } from "astro:actions";
-import { eq, Users } from "astro:db";
+import { eq, User } from "astro:db";
 import { db } from "astro:db";
 
 export default defineConfig({
@@ -20,8 +20,8 @@ export default defineConfig({
         return null;
         const [user] = await db
           .select()
-          .from(Users)
-          .where(eq(Users.email, `${email}`));
+          .from(User)
+          .where(eq(User.email, `${email}`));
 
         if (!user) {
           throw new Error("User not found");

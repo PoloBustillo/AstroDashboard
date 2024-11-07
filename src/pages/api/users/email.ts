@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { db, eq, Users } from "astro:db";
+import { db, eq, User } from "astro:db";
 
 export const GET: APIRoute = async ({ params, request }) => {
   const queryData = new URL(request.url);
@@ -18,7 +18,7 @@ export const GET: APIRoute = async ({ params, request }) => {
     );
   }
 
-  const users = await db.select().from(Users).where(eq(Users.email, email));
+  const users = await db.select().from(User).where(eq(User.email, email));
   if (users.length === 0) {
     return new Response(
       JSON.stringify({
