@@ -1,13 +1,13 @@
 import { column, defineDb, defineTable } from "astro:db";
 
-const Role = defineTable({
+export const Role = defineTable({
   columns: {
     id: column.text({ primaryKey: true }),
     name: column.text(),
   },
 });
 
-const User = defineTable({
+export const User = defineTable({
   columns: {
     id: column.text({ primaryKey: true, unique: true }),
     name: column.text(),
@@ -31,7 +31,7 @@ export const Blog = defineTable({
   },
 });
 
-const BlogResource = defineTable({
+export const BlogResource = defineTable({
   columns: {
     id: column.text({ primaryKey: true }),
     productId: column.text({ references: () => Blog.columns.id }),
