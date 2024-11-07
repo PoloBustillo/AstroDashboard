@@ -2,10 +2,12 @@ import Google from "@auth/core/providers/google";
 import Discord from "@auth/core/providers/discord";
 import GitHub from "@auth/core/providers/github";
 import X from "@auth/core/providers/twitter";
-
+import bcrypt from "bcrypt";
 import Credentials from "@auth/core/providers/credentials";
 import { defineConfig } from "auth-astro";
 import { actions } from "astro:actions";
+import { eq, Users } from "astro:db";
+import { db } from "astro:db";
 
 export default defineConfig({
   providers: [
@@ -15,27 +17,23 @@ export default defineConfig({
         password: { label: "Contraseña", type: "password" },
       },
       authorize: async ({ email, password }) => {
-        // const [user] = await db
-        //   .select()
-        //   .from(User)
-        //   .where(eq(User.email, `${email}`));
+        return null;
+        const [user] = await db
+          .select()
+          .from(Users)
+          .where(eq(Users.email, `${email}`));
 
-        // if (!user) {
-        //   throw new Error("User not found");
-        // }
+        if (!user) {
+          throw new Error("User not found");
+        }
 
-        // if (!bcrypt.compareSync(password as string, user.password)) {
-        //   throw new Error("Invalid password");
-        // }
+        if (!bcrypt.compareSync(password as string, user.password)) {
+          throw new Error("Invalid password");
+        }
 
-        // const { password: _, ...rest } = user;
+        const { password: _, id, ...rest } = user;
 
-        return {
-          name: "Usuario",
-          email: email as string,
-          role: "admin",
-          isActive: true,
-        };
+        return { id: id.toString(), ...rest };
       },
     }),
     X({
@@ -55,6 +53,7 @@ export default defineConfig({
       clientSecret: import.meta.env.GITHUB_CLIENT_SECRET,
     }),
   ],
+
   callbacks: {
     async session({ session, token, user }) {
       const { data, error } = await actions.isAdmin(
