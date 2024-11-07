@@ -1,11 +1,6 @@
 ---
 import { actions } from "astro:actions";
 import Logo from "./Logo.astro";
-import { isInputError } from "astro:actions";
-const result = Astro.getActionResult(actions.registerUser);
-if (result?.error && isInputError(result.error)) {
-  console.log(result.error.fields);
-}
 ---
 
 <div
@@ -19,13 +14,134 @@ if (result?.error && isInputError(result.error)) {
     <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
       Crea una cuenta
     </h2>
-    {
-      (
-        <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-          <span class="font-medium">Oops!</span> Username already taken!
-        </p>
-      )
-    }
+
+    <div
+      id="error-container"
+      class="hidden p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
+      role="alert"
+    >
+      <span class="font-medium">Oops!</span>
+      <span id="action-error-msg"></span>
+    </div>
+    <script>
+      import { isInputError } from "astro:actions";
+      import { isActionError } from "astro:actions";
+      import { actions } from "astro:actions";
+      const { signIn } = await import("auth-astro/client");
+
+      const togglePasswordVisibility = (inputId: string, eyeId: string) => {
+        const eyeElement = document.getElementById(eyeId);
+        eyeElement?.addEventListener("click", () => {
+          const inputElement = document.querySelector(
+            `#${inputId}`,
+          ) as HTMLInputElement;
+          if (inputElement) {
+            inputElement.type =
+              inputElement.type === "password" ? "text" : "password";
+          }
+        });
+      };
+      const handleFormSubmit = async (
+        form: HTMLFormElement,
+        btnSubmit: HTMLButtonElement,
+      ) => {
+        const errorContainer = document.getElementById("error-container");
+        if (errorContainer) {
+          errorContainer.classList.add("hidden");
+        }
+
+        // Clear previous input errors
+        const errorElements = document.querySelectorAll(
+          ".text-sm.text-red-600.mt-1",
+        );
+        errorElements.forEach((element) => element.remove());
+        btnSubmit.setAttribute("disabled", "disabled");
+
+        const formData = new FormData(form);
+
+        const { data, error } = await actions.registerUser(formData);
+        if (isActionError(error)) {
+          const errorContainer = document.getElementById("error-container");
+          const errorMsg = document.getElementById("action-error-msg");
+
+          if (errorContainer) {
+            errorContainer.classList.remove("hidden");
+          }
+          if (errorMsg) {
+            errorMsg.textContent =
+              error.message || "An error occurred. Please try again.";
+          }
+        }
+        if (isInputError(error)) {
+          const inputErrors = error.fields;
+          Object.entries(inputErrors).forEach(([field, messages]) => {
+            if (field == "confirm") {
+              const confirmPasswordElement =
+                document.getElementById("confirmpassword");
+              if (confirmPasswordElement && messages) {
+                messages.forEach((message) => {
+                  const errorElement = document.createElement("div");
+                  errorElement.className = "text-sm text-red-600 mt-1";
+                  errorElement.textContent = message;
+                  if (confirmPasswordElement.parentNode) {
+                    confirmPasswordElement.parentNode.appendChild(errorElement);
+                  }
+                });
+              }
+            }
+            const inputElement = document.getElementById(field);
+            if (inputElement && messages) {
+              messages.forEach((message) => {
+                const errorElement = document.createElement("div");
+                errorElement.className = "text-sm text-red-600 mt-1";
+                errorElement.textContent = message;
+                if (inputElement.parentNode) {
+                  inputElement.parentNode.appendChild(errorElement);
+                }
+              });
+            }
+          });
+        }
+        btnSubmit.removeAttribute("disabled");
+      };
+      const setupSocialLoginButtons = (signIn: any) => {
+        const loginButton = document.querySelector(
+          "#loginGoogle",
+        ) as HTMLButtonElement;
+        const loginDiscord = document.querySelector(
+          "#loginDiscord",
+        ) as HTMLButtonElement;
+        const loginGithub = document.querySelector(
+          "#loginGithub",
+        ) as HTMLButtonElement;
+        const loginX = document.querySelector("#loginX") as HTMLButtonElement;
+        if (loginX) {
+          loginX.onclick = () => signIn("twitter");
+        }
+        if (loginGithub) {
+          loginGithub.onclick = () => signIn("github");
+        }
+        if (loginDiscord) {
+          loginDiscord.onclick = () => signIn("discord");
+        }
+        if (loginButton) {
+          loginButton.onclick = () => signIn("google");
+        }
+      };
+
+      togglePasswordVisibility("password", "eye-password");
+      togglePasswordVisibility("confirmpassword", "eye-confirmpassword");
+
+      const form = document.querySelector("form") as HTMLFormElement;
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const btnSubmit = document.querySelector(
+          "#btn-submit",
+        ) as HTMLButtonElement;
+        handleFormSubmit(form, btnSubmit);
+      });
+      setupSocialLoginButtons(signIn);
+    </script>
     <form class="mt-8 space-y-6" method="POST" action={actions.registerUser}>
       <div>
         <label
@@ -63,45 +179,80 @@ if (result?.error && isInputError(result.error)) {
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >Contraseña</label
         >
-        <input
-          type="password"
-          name="password"
-          id="password"
-          placeholder="••••••••"
-          class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-          required
-        />
+        <div class="relative">
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="••••••••"
+            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            required
+          />
+          <span
+            class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+            id="eye-password"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="1em"
+              height="1em"
+              viewBox="0 0 28 28"
+            >
+              <path
+                fill="currentColor"
+                d="M25.257 16h.005h-.01zm-.705-.52c.1.318.387.518.704.52c.07 0 .148-.02.226-.04c.39-.12.61-.55.48-.94C25.932 14.93 22.932 6 14 6S2.067 14.93 2.037 15.02c-.13.39.09.81.48.94c.4.13.82-.09.95-.48l.003-.005c.133-.39 2.737-7.975 10.54-7.975c7.842 0 10.432 7.65 10.542 7.98M10.5 16a3.5 3.5 0 1 1 7 0a3.5 3.5 0 0 1-7 0m3.5-5a5 5 0 1 0 0 10a5 5 0 0 0 0-10"
+              ></path>
+            </svg>
+          </span>
+        </div>
       </div>
       <div>
         <label
           for="confirmpassword"
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >Confirma contraseña</label
+          >Confirmar Contraseña</label
         >
-        <input
-          type="password"
-          name="confirmpassword"
-          id="confirmpassword"
-          placeholder="••••••••"
-          class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-          required
-        />
+        <div class="relative">
+          <input
+            type="password"
+            name="confirmpassword"
+            id="confirmpassword"
+            placeholder="••••••••"
+            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            required
+          />
+          <span
+            class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+            id="eye-confirmpassword"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="1em"
+              height="1em"
+              viewBox="0 0 28 28"
+            >
+              <path
+                fill="currentColor"
+                d="M25.257 16h.005h-.01zm-.705-.52c.1.318.387.518.704.52c.07 0 .148-.02.226-.04c.39-.12.61-.55.48-.94C25.932 14.93 22.932 6 14 6S2.067 14.93 2.037 15.02c-.13.39.09.81.48.94c.4.13.82-.09.95-.48l.003-.005c.133-.39 2.737-7.975 10.54-7.975c7.842 0 10.432 7.65 10.542 7.98M10.5 16a3.5 3.5 0 1 1 7 0a3.5 3.5 0 0 1-7 0m3.5-5a5 5 0 1 0 0 10a5 5 0 0 0 0-10"
+              ></path>
+            </svg>
+          </span>
+        </div>
       </div>
+
       <div class="flex items-start">
         <div class="flex items-center h-5">
           <input
-            id="remember"
-            aria-describedby="remember"
-            name="remember"
+            id="terms"
+            aria-describedby="terms and conditions"
+            name="terms"
             type="checkbox"
             class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
             required
           />
         </div>
         <div class="ml-3 text-sm">
-          <label
-            for="remember"
-            class="font-medium text-gray-900 dark:text-white"
+          <label for="terms" class="font-medium text-gray-900 dark:text-white"
             >I accept the <a
               href="#"
               class="text-primary-700 hover:underline dark:text-primary-500"
@@ -113,6 +264,7 @@ if (result?.error && isInputError(result.error)) {
       <div class="flex justify-around">
         <button
           type="submit"
+          id="btn-submit"
           class="w-full px-5 py-3 text-base font-medium text-center text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
           >Crea cuenta</button
         >
