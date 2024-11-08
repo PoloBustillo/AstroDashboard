@@ -1,7 +1,7 @@
 import { AuthError, CallbackRouteError } from "@auth/core/errors";
-import { defineAction } from "astro:actions";
+import { ACTION_ERROR_CODES, ActionError, defineAction } from "astro:actions";
 import { z } from "astro:content";
-import { db, NOW, User } from "astro:db";
+import { db, eq, NOW, User } from "astro:db";
 import { AstroAuth } from "auth-astro/server";
 import bcrypt from "bcrypt";
 import type { UserType } from "db/types";
@@ -28,36 +28,51 @@ export const loginUser = defineAction({
       });
     }
 
-    const saltRounds = 10;
+    try {
+      const existingUser = await db
+        .select()
+        .from(User)
+        .where(eq(User.email, email));
+      console.log(existingUser[0]);
 
-    // try {
-    //   const newUser = {
-    //     name,
-    //     email,
-    //     password: await bcrypt.hash(password, saltRounds), // You should hash the password before saving it
-    //     id: uuidv4(),
-    //     isActive: true,
-    //     createdAt: new Date(),
-    //     role: USER_ROLE,
-    //   } as UserType;
+      if (existingUser.length == 0) {
+        throw new Error("Usuario no existe");
+      }
+      if (!existingUser[0].isActive) {
+        throw new Error("Usuario no activo");
+      }
+      const validPassword = await bcrypt.compare(
+        password,
+        existingUser[0].password,
+      );
+      if (!validPassword) {
+        throw new ActionError({
+          message: "Contraseña incorrecta",
+          code: ACTION_ERROR_CODES[1],
+        });
+      }
+      const user = {
+        name: existingUser[0].name,
+        email,
+        id: existingUser[0].id,
+        isActive: existingUser[0].isActive,
+        createdAt: existingUser[0].createdAt,
+        role: existingUser[0].role,
+      } as UserType;
 
-    //   const result = await db.insert(User).values(newUser);
-    //   const { password: _, ...user } = newUser;
-    //   console.log("User created successfully", result);
-
-    //   return { message: "Usuario creado exitosamente", user: user };
-    // } catch (error: unknown) {
-    //   console.error("Error creating user", error);
-    //   const e = normalizeError(error);
-    //   if (e.message) {
-    //     throw new Error(e.message);
-    //   }
-    //   if (error instanceof AuthError) {
-    //     throw new CallbackRouteError(error.message);
-    //   }
-    //   throw new Error(
-    //     "Error al crear el usuario: Usuario ya existe o Servicio fuera de linea",
-    //   );
-    // }
+      return { message: "Usuario valido", user: user };
+    } catch (error: unknown) {
+      console.error("Error creating user", error);
+      const e = normalizeError(error);
+      if (e.message) {
+        throw new Error(e.message);
+      }
+      if (error instanceof AuthError) {
+        throw new CallbackRouteError(error.message);
+      }
+      throw new Error(
+        "Error al crear el usuario: Usuario ya existe o Servicio fuera de linea",
+      );
+    }
   },
 });

@@ -24,16 +24,6 @@ export const registerUser = defineAction({
       path: ["confirm"],
     }),
   handler: async ({ email, name, password, terms }, { cookies }) => {
-    // if (remember_me) {
-    //   cookies.set("email", email, {
-    //     expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365), // 1 año,
-    //     path: "/",
-    //   });
-    // } else {
-    //   cookies.delete("email", {
-    //     path: "/",
-    //   });
-    // }
     if (!terms) {
       throw new Error("Debe aceptar los términos y condiciones");
     }
