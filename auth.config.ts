@@ -25,7 +25,7 @@ const checkIfUserExistsOrCreate = async (profile: Partial<Profile>) => {
   } else {
     const user = {
       email: profile.email as string,
-      image: profile.picture,
+      image: profile.picture ?? profile.avatar_url,
       name: profile.name,
       isActive: true,
       createdAt: new Date(),
