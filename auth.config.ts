@@ -10,6 +10,31 @@ import { eq, User } from "astro:db";
 import { db } from "astro:db";
 import { normalizeError } from "src/utils/methods";
 import type { UserType } from "db/types";
+import type { Profile } from "@auth/core/types";
+import { v4 as uuidv4 } from "uuid";
+
+const checkIfUserExistsOrCreate = async (profile: Profile) => {
+  const existingUser = await db
+    .select()
+    .from(User)
+    .where(eq(User.email, profile.email as string));
+
+  if (existingUser.length > 0) {
+    return existingUser[0];
+  } else {
+    const user = {
+      email: profile.email as string,
+      name: profile.name,
+      isActive: true,
+      createdAt: new Date(),
+      role: "user",
+      id: uuidv4(),
+    } as UserType;
+    await db.insert(User).values(user);
+
+    return user;
+  }
+};
 
 export default defineConfig({
   debug: true,
@@ -29,7 +54,7 @@ export default defineConfig({
 
           const validPassword = bcrypt.compare(
             password as string,
-            existingUser[0].password,
+            existingUser[0].password!,
           );
           if (!validPassword) {
             throw new Error("Contraseña incorrecta");
@@ -66,13 +91,15 @@ export default defineConfig({
     Google({
       clientId: import.meta.env.GOOGLE_CLIENT_ID,
       clientSecret: import.meta.env.GOOGLE_CLIENT_SECRET,
-      profile(profile) {
+      async profile(profile) {
+        let user = await checkIfUserExistsOrCreate(profile);
+        console.log(user);
+
         return {
-          id: profile.login,
-          name: "MICHI",
-          email: profile.email,
-          isActive: true,
-          role: "user", // or any default role you want to assign
+          email: user.email,
+          name: user.name,
+          role: user.role,
+          id: user.id,
         };
       },
     }),

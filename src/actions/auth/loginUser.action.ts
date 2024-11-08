@@ -1,13 +1,10 @@
 import { AuthError, CallbackRouteError } from "@auth/core/errors";
 import { ACTION_ERROR_CODES, ActionError, defineAction } from "astro:actions";
 import { z } from "astro:content";
-import { db, eq, NOW, User } from "astro:db";
-import { AstroAuth } from "auth-astro/server";
+import { db, eq, User } from "astro:db";
 import bcrypt from "bcrypt";
 import type { UserType } from "db/types";
-import { USER_ROLE } from "src/utils/constants";
 import { normalizeError } from "src/utils/methods";
-import { v4 as uuidv4 } from "uuid";
 
 export const loginUser = defineAction({
   accept: "form",
@@ -43,7 +40,7 @@ export const loginUser = defineAction({
       }
       const validPassword = await bcrypt.compare(
         password,
-        existingUser[0].password,
+        existingUser[0].password!,
       );
       if (!validPassword) {
         throw new ActionError({

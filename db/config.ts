@@ -11,8 +11,9 @@ export const User = defineTable({
   columns: {
     id: column.text({ primaryKey: true, unique: true }),
     name: column.text(),
+    image: column.text({ optional: true }),
     email: column.text({ unique: true }),
-    password: column.text(),
+    password: column.text({ optional: true }),
     isActive: column.boolean(),
     createdAt: column.date({ default: new Date() }),
     role: column.text({ references: () => Role.columns.id }), // admin, user, super-user
