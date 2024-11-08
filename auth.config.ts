@@ -12,8 +12,9 @@ import { normalizeError } from "src/utils/methods";
 import type { UserType } from "db/types";
 import type { Profile } from "@auth/core/types";
 import { v4 as uuidv4 } from "uuid";
+import { CallbackRouteError } from "@auth/core/errors";
 
-const checkIfUserExistsOrCreate = async (profile: Profile) => {
+const checkIfUserExistsOrCreate = async (profile: Partial<Profile>) => {
   const existingUser = await db
     .select()
     .from(User)
@@ -88,7 +89,10 @@ export default defineConfig({
       clientId: import.meta.env.X_CLIENT_ID,
       clientSecret: import.meta.env.X_CLIENT_SECRET,
       async profile(profile) {
-        let user = await checkIfUserExistsOrCreate(profile);
+        let user = await checkIfUserExistsOrCreate({
+          ...profile,
+          id: profile.id?.toString(),
+        });
         console.log(user);
 
         return {
@@ -104,7 +108,10 @@ export default defineConfig({
       clientId: import.meta.env.DISCORD_CLIENT_ID,
       clientSecret: import.meta.env.DISCORD_CLIENT_SECRET,
       async profile(profile) {
-        let user = await checkIfUserExistsOrCreate(profile);
+        let user = await checkIfUserExistsOrCreate({
+          ...profile,
+          id: profile.id?.toString(),
+        });
         console.log(user);
 
         return {
@@ -120,7 +127,10 @@ export default defineConfig({
       clientId: import.meta.env.GOOGLE_CLIENT_ID,
       clientSecret: import.meta.env.GOOGLE_CLIENT_SECRET,
       async profile(profile) {
-        let user = await checkIfUserExistsOrCreate(profile);
+        let user = await checkIfUserExistsOrCreate({
+          ...profile,
+          id: profile.id?.toString(),
+        });
         console.log(user);
 
         return {
@@ -136,8 +146,10 @@ export default defineConfig({
       clientId: import.meta.env.GITHUB_CLIENT_ID,
       clientSecret: import.meta.env.GITHUB_CLIENT_SECRET,
       async profile(profile) {
-        let user = await checkIfUserExistsOrCreate(profile);
-        console.log(user);
+        let user = await checkIfUserExistsOrCreate({
+          ...profile,
+          id: profile.id?.toString(),
+        });
 
         return {
           email: user.email,

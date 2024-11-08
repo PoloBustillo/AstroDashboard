@@ -10,7 +10,7 @@ export const Role = defineTable({
 export const User = defineTable({
   columns: {
     id: column.text({ primaryKey: true, unique: true }),
-    name: column.text(),
+    name: column.text({ optional: true }),
     image: column.text({ optional: true }),
     email: column.text({ unique: true }),
     password: column.text({ optional: true }),
