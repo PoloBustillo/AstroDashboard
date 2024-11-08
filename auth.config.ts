@@ -87,10 +87,34 @@ export default defineConfig({
     X({
       clientId: import.meta.env.X_CLIENT_ID,
       clientSecret: import.meta.env.X_CLIENT_SECRET,
+      async profile(profile) {
+        let user = await checkIfUserExistsOrCreate(profile);
+        console.log(user);
+
+        return {
+          email: user.email,
+          image: user.image,
+          name: user.name,
+          role: user.role,
+          id: user.id,
+        };
+      },
     }),
     Discord({
       clientId: import.meta.env.DISCORD_CLIENT_ID,
       clientSecret: import.meta.env.DISCORD_CLIENT_SECRET,
+      async profile(profile) {
+        let user = await checkIfUserExistsOrCreate(profile);
+        console.log(user);
+
+        return {
+          email: user.email,
+          image: user.image,
+          name: user.name,
+          role: user.role,
+          id: user.id,
+        };
+      },
     }),
     Google({
       clientId: import.meta.env.GOOGLE_CLIENT_ID,
@@ -111,6 +135,18 @@ export default defineConfig({
     GitHub({
       clientId: import.meta.env.GITHUB_CLIENT_ID,
       clientSecret: import.meta.env.GITHUB_CLIENT_SECRET,
+      async profile(profile) {
+        let user = await checkIfUserExistsOrCreate(profile);
+        console.log(user);
+
+        return {
+          email: user.email,
+          image: user.image,
+          name: user.name,
+          role: user.role,
+          id: user.id,
+        };
+      },
     }),
   ],
   callbacks: {
@@ -123,9 +159,6 @@ export default defineConfig({
       return users[0].isActive;
     },
     async session({ session, user }) {
-      console.log("🚀 ~ session ~ user:", user);
-      console.log("🚀 ~ session ~ session:", session);
-
       const { data, error } = await actions.isAdmin(
         session.user.email as string,
       );
