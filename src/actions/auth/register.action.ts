@@ -1,8 +1,7 @@
 import { AuthError, CallbackRouteError } from "@auth/core/errors";
 import { defineAction } from "astro:actions";
 import { z } from "astro:content";
-import { db, NOW, User } from "astro:db";
-import { AstroAuth } from "auth-astro/server";
+import { db, User } from "astro:db";
 import bcrypt from "bcrypt";
 import type { UserType } from "db/types";
 import { USER_ROLE } from "src/utils/constants";

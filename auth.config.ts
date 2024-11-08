@@ -14,23 +14,42 @@ import type { Profile } from "@auth/core/types";
 import { v4 as uuidv4 } from "uuid";
 
 const checkIfUserExistsOrCreate = async (profile: Partial<Profile>) => {
+  console.log("🚀 ~ checkIfUserExistsOrCreate ~ profile:", profile);
+
   const existingUser = await db
     .select()
     .from(User)
-    .where(eq(User.email, profile.email as string));
+    .where(
+      eq(
+        User.email,
+        (profile.email as string) ??
+          (profile.data as { username?: string }).username,
+      ),
+    );
 
   if (existingUser.length > 0) {
     return existingUser[0];
   } else {
     const user = {
-      email: profile.email as string,
-      image: profile.picture ?? profile.avatar_url,
-      name: profile.name ?? profile.login,
+      email:
+        (profile.email as string) ??
+        (profile.data as { username?: string }).username,
+      image:
+        (profile.picture ?? profile.avatar_url ?? profile.data)
+          ? (profile.data as { profile_image_url?: string }).profile_image_url
+          : `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.webp?size=240`,
+      name:
+        profile.name ??
+        profile.login ??
+        profile.global_name ??
+        (profile.data as { name?: string })?.name,
       isActive: true,
       createdAt: new Date(),
       role: "user",
       id: uuidv4(),
     } as UserType;
+    console.log("🚀 ~ checkIfUserExistsOrCreate ~ user:", user);
+
     await db.insert(User).values(user);
 
     return user;
