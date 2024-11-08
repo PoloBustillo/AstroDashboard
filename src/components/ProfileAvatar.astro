@@ -1,7 +1,8 @@
 ---
 import { getSession } from "auth-astro/server";
-import avatar from "@icons/avatar.svg";
 const session = await getSession(Astro.request);
+console.log(session);
+console.log("🚀 ~ session:", session);
 ---
 
 <script>
@@ -27,7 +28,7 @@ const session = await getSession(Astro.request);
             <span class="sr-only">Abrir menu de usuario</span>
             <img
               class="w-8 h-8 rounded-full"
-              src={"/avatar.svg"}
+              src={session.user.image ?? "/avatar.svg"}
               alt="foto del usuario"
             />
           </button>

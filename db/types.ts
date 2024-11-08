@@ -7,10 +7,11 @@ export type UserType = {
   id: string;
   name: string;
   email: string;
-  password: string;
+  password?: string;
   isActive: boolean;
   createdAt: Date;
   role: string;
+  image?: string;
 };
 
 export type BlogType = {

@@ -38,6 +38,9 @@ export const loginUser = defineAction({
       if (!existingUser[0].isActive) {
         throw new Error("Usuario no activo");
       }
+      if (!existingUser[0].password) {
+        throw new Error("Contacte al admin, no hay datos de su cuenta");
+      }
       const validPassword = await bcrypt.compare(
         password,
         existingUser[0].password!,

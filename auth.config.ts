@@ -24,6 +24,7 @@ const checkIfUserExistsOrCreate = async (profile: Profile) => {
   } else {
     const user = {
       email: profile.email as string,
+      image: profile.picture,
       name: profile.name,
       isActive: true,
       createdAt: new Date(),
@@ -43,15 +44,17 @@ export default defineConfig({
       credentials: {
         email: { label: "Correo", type: "email" },
         password: { label: "Contraseña", type: "password" },
-        isCreation: { label: "Flag", type: "text" },
       },
-      authorize: async ({ email, password, isCreation }) => {
+      authorize: async ({ email, password }) => {
         try {
           const existingUser = await db
             .select()
             .from(User)
             .where(eq(User.email, email as string));
 
+          if (!existingUser[0].password) {
+            throw new Error("Contacte al admin, no hay datos de su cuenta");
+          }
           const validPassword = bcrypt.compare(
             password as string,
             existingUser[0].password!,
@@ -62,6 +65,7 @@ export default defineConfig({
           const user = {
             name: existingUser[0].name,
             email,
+            image: existingUser[0].image,
             id: existingUser[0].id,
             isActive: existingUser[0].isActive,
             createdAt: existingUser[0].createdAt,
@@ -97,6 +101,7 @@ export default defineConfig({
 
         return {
           email: user.email,
+          image: user.image,
           name: user.name,
           role: user.role,
           id: user.id,
@@ -117,11 +122,15 @@ export default defineConfig({
       if (users.length == 0) return true;
       return users[0].isActive;
     },
-    async session({ session }) {
+    async session({ session, user }) {
+      console.log("🚀 ~ session ~ user:", user);
+      console.log("🚀 ~ session ~ session:", session);
+
       const { data, error } = await actions.isAdmin(
         session.user.email as string,
       );
       if (data?.isAdmin) session.user.role = "admin";
+      if (user?.image) session.user.image = user.image;
 
       return session;
     },
