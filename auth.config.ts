@@ -12,7 +12,6 @@ import { normalizeError } from "src/utils/methods";
 import type { UserType } from "db/types";
 import type { Profile } from "@auth/core/types";
 import { v4 as uuidv4 } from "uuid";
-import { CallbackRouteError } from "@auth/core/errors";
 
 const checkIfUserExistsOrCreate = async (profile: Partial<Profile>) => {
   const existingUser = await db
@@ -24,7 +23,7 @@ const checkIfUserExistsOrCreate = async (profile: Partial<Profile>) => {
     return existingUser[0];
   } else {
     const user = {
-      email: profile.email as string,
+      email: (profile.email as string) ?? profile.login,
       image: profile.picture ?? profile.avatar_url,
       name: profile.name,
       isActive: true,
