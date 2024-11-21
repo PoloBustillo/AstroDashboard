@@ -37,7 +37,6 @@ const checkIfUserExistsOrCreate = async (profile: Partial<Profile>) => {
       image:
         profile.picture ??
         profile.avatar_url ??
-        profile.data ??
         (profile.data as { profile_image_url?: string }).profile_image_url ??
         `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.webp?size=240`,
       name:
