@@ -1,8 +1,8 @@
 import type { APIRoute } from "astro";
-import { db, NOW, User, eq } from "astro:db";
+import { db, User, eq } from "astro:db";
 import { res } from "src/utils/methods";
 import bcrypt, { compare } from "bcrypt";
-import { boolean, object, safeParse, string, optional } from "valibot";
+import { object, safeParse, string, optional } from "valibot";
 
 const UserSingInSchema = object({
   name: optional(string()),
@@ -31,6 +31,9 @@ export const POST: APIRoute = async ({ params, request }) => {
 
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(output.password, salt);
+    if (!existingUser[0].password) {
+      return res("Password is missing for the user", { status: 400 });
+    }
     const isValid = await compare(existingUser[0].password, hashedPassword);
 
     if (!isValid) {

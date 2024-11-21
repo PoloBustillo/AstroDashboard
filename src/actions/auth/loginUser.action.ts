@@ -30,7 +30,6 @@ export const loginUser = defineAction({
         .select()
         .from(User)
         .where(eq(User.email, email));
-      console.log(existingUser[0]);
 
       if (existingUser.length == 0) {
         throw new Error("Usuario no existe");

@@ -15,7 +15,6 @@ import { v4 as uuidv4 } from "uuid";
 
 const checkIfUserExistsOrCreate = async (profile: Partial<Profile>) => {
   console.log("🚀 ~ checkIfUserExistsOrCreate ~ profile:", profile);
-
   const existingUser = await db
     .select()
     .from(User)
@@ -35,9 +34,11 @@ const checkIfUserExistsOrCreate = async (profile: Partial<Profile>) => {
         (profile.email as string) ??
         (profile.data as { username?: string }).username,
       image:
-        (profile.picture ?? profile.avatar_url ?? profile.data)
-          ? (profile.data as { profile_image_url?: string }).profile_image_url
-          : `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.webp?size=240`,
+        profile.picture ??
+        profile.avatar_url ??
+        profile.data ??
+        (profile.data as { profile_image_url?: string }).profile_image_url ??
+        `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.webp?size=240`,
       name:
         profile.name ??
         profile.login ??
@@ -48,8 +49,8 @@ const checkIfUserExistsOrCreate = async (profile: Partial<Profile>) => {
       role: "user",
       id: uuidv4(),
     } as UserType;
-    console.log("🚀 ~ checkIfUserExistsOrCreate ~ user:", user);
 
+    console.log("🚀 ~ checkIfUserExistsOrCreate ~ user:", user);
     await db.insert(User).values(user);
 
     return user;
@@ -111,7 +112,6 @@ export default defineConfig({
           ...profile,
           id: profile.id?.toString(),
         });
-        console.log(user);
 
         return {
           email: user.email,
@@ -130,7 +130,6 @@ export default defineConfig({
           ...profile,
           id: profile.id?.toString(),
         });
-        console.log(user);
 
         return {
           email: user.email,
@@ -149,7 +148,6 @@ export default defineConfig({
           ...profile,
           id: profile.id?.toString(),
         });
-        console.log(user);
 
         return {
           email: user.email,
