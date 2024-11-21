@@ -15,6 +15,7 @@ import { v4 as uuidv4 } from "uuid";
 
 const checkIfUserExistsOrCreate = async (profile: Partial<Profile>) => {
   console.log("🚀 ~ checkIfUserExistsOrCreate ~ profile:", profile);
+
   const existingUser = await db
     .select()
     .from(User)

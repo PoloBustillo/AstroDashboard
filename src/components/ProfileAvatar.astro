@@ -26,7 +26,7 @@ const session = await getSession(Astro.request);
             <span class="sr-only">Abrir menu de usuario</span>
             <img
               class="w-8 h-8 rounded-full"
-              src={session.user.image ?? "/avatar.svg"}
+              src={(session.user.image as string) ?? "/avatar.svg"}
               alt="foto del usuario"
             />
           </button>
