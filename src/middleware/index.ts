@@ -26,7 +26,8 @@ export const onRequest = defineMiddleware(async (context, next) => {
     session != null &&
     session.user
   ) {
-    const isAdmin = session.user.role === "admin";
+    const isAdmin =
+      session.user.role === "admin" || session.user.role === "superadmin";
     return isAdmin ? next() : context.redirect("/No-Autorizado");
   }
   return next();

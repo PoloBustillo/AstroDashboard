@@ -5,11 +5,21 @@ export default async function seed() {
   const roles = [
     { id: "admin", name: "Administrador" },
     { id: "user", name: "Usuario de sistema" },
+    { id: "superadmin", name: "Super Admin" },
   ];
 
   await db.insert(Role).values(roles);
 
   const users = [
+    {
+      id: "0",
+      name: "SUDO",
+      email: "sudo@example.com",
+      password: await bcrypt.hash("1234567", 10),
+      isActive: true,
+      createdAt: NOW,
+      role: "superadmin",
+    },
     {
       id: "1",
       name: "Admin User",

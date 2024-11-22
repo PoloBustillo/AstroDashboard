@@ -9,7 +9,7 @@ export const isAdmin = defineAction({
     const user = await db.select().from(User).where(eq(User.email, email));
     const role = user.at(0)?.role;
     return {
-      isAdmin: role === "admin",
+      isAdmin: role === "admin" || role === "superadmin",
     };
   },
 });

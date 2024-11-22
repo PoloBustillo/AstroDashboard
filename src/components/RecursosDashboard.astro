@@ -119,8 +119,15 @@ console.log(resources);
                       <td class="max-w-sm p-4 overflow-hidden text-base font-normal text-gray-500 truncate xl:max-w-xs dark:text-gray-400">
                         <data value="id"> {resource.blog.id}</data>
                       </td>
-                      <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        <data value="activo"> {resource.blog.isActive}</data>
+                      <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">
+                        <div class="flex items-center">
+                          {resource.blog.isActive ? (
+                            <div class="h-2.5 w-2.5 rounded-full bg-green-400 mr-2" />
+                          ) : (
+                            <div class="h-2.5 w-2.5 rounded-full bg-red-500 mr-2" />
+                          )}
+                          {resource.blog.isActive}
+                        </div>
                       </td>
                       <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         <data value="tags"> {resource.blog.tags}</data>
