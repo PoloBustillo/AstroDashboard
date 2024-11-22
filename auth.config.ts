@@ -14,8 +14,6 @@ import type { Profile } from "@auth/core/types";
 import { v4 as uuidv4 } from "uuid";
 
 const checkIfUserExistsOrCreate = async (profile: Partial<Profile>) => {
-  console.log("🚀 ~ checkIfUserExistsOrCreate ~ profile:", profile);
-
   const existingUser = await db
     .select()
     .from(User)
@@ -26,7 +24,6 @@ const checkIfUserExistsOrCreate = async (profile: Partial<Profile>) => {
           (profile.data as { username?: string }).username,
       ),
     );
-
   if (existingUser.length > 0) {
     return existingUser[0];
   } else {
@@ -50,7 +47,6 @@ const checkIfUserExistsOrCreate = async (profile: Partial<Profile>) => {
       id: uuidv4(),
     } as UserType;
 
-    console.log("🚀 ~ checkIfUserExistsOrCreate ~ user:", user);
     await db.insert(User).values(user);
 
     return user;
@@ -115,6 +111,7 @@ export default defineConfig({
 
         return {
           email: user.email,
+          isActive: user.isActive,
           image: user.image,
           name: user.name,
           role: user.role,
@@ -133,6 +130,7 @@ export default defineConfig({
 
         return {
           email: user.email,
+          isActive: user.isActive,
           image: user.image,
           name: user.name,
           role: user.role,
@@ -148,9 +146,10 @@ export default defineConfig({
           ...profile,
           id: profile.id?.toString(),
         });
-
+        console.log("🚀 ~ profile ~ user:", user);
         return {
           email: user.email,
+          isActive: user.isActive,
           image: user.image,
           name: user.name,
           role: user.role,
@@ -169,6 +168,7 @@ export default defineConfig({
 
         return {
           email: user.email,
+          isActive: user.isActive,
           image: user.image,
           name: user.name,
           role: user.role,
@@ -186,12 +186,26 @@ export default defineConfig({
       if (users.length == 0) return true;
       return users[0].isActive;
     },
-    async session({ session, user }) {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.role = user.role;
+        token.isActive = user.isActive;
+      }
+      return token;
+    },
+    async session({ session, user, token, newSession, trigger }) {
       const { data, error } = await actions.isAdmin(
         session.user.email as string,
       );
-      if (data?.isAdmin) session.user.role = "admin";
-      if (user?.image) session.user.image = user.image;
+      if (data?.isAdmin) {
+        session.user.role = "admin";
+      } else {
+        session.user.role = "user";
+      }
+      if (token?.id) session.user.id = token.id as string;
+      if (token?.role) session.user.role = token.role as string;
+      if (token?.isActive) session.user.isActive = token.isActive as boolean;
 
       return session;
     },

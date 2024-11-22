@@ -1,8 +1,12 @@
 ---
+import { getSession } from "auth-astro/server";
 
+const session = await getSession(Astro.request);
+const email = session?.user.email;
 ---
 
 <script>
+  import { actions } from "astro:actions";
   import Dropzone from "dropzone";
   import "dropzone/dist/dropzone.css";
 
@@ -60,43 +64,66 @@
     }
   });
 
+  document
+    .getElementById("closeDrawer")
+    ?.addEventListener("click", function () {
+      uploadedFilesArray.length = 0;
+      myDropzone.removeAllFiles(true);
+      const form = document.getElementById("mainForm") as HTMLFormElement;
+      form?.reset();
+    });
+  document
+    .getElementById("closeDrawer")
+    ?.addEventListener("click", function () {
+      uploadedFilesArray.length = 0;
+      myDropzone.removeAllFiles(true);
+      const form = document.getElementById("mainForm") as HTMLFormElement;
+      form?.reset();
+    });
+
   const mainForm = document.querySelector("#mainForm");
   if (mainForm) {
-    mainForm.addEventListener("submit", function (event) {
-      console.log("🚀 ~ uploadedFilesArray:", uploadedFilesArray);
+    mainForm.addEventListener("submit", async (event) => {
       event.preventDefault();
+
+      const target = event.target as HTMLFormElement;
+      const id = target.dataset.id ?? "";
+      const email = target.dataset.email ?? "";
+
+      console.log("ID:", id);
+      console.log("Email:", email);
+
+      const btnSubmit = document.querySelector("#btnSubmit");
+      btnSubmit?.setAttribute("disabled", "disabled");
       const formData = new FormData(event.target as HTMLFormElement);
+
+      const title = formData.get("title") as string;
+      const description = formData.get("description") as string;
+
+      const { data, error } = await actions.addResource({
+        title,
+        description,
+        userId: id,
+      });
+
       console.log("Form Data:");
+      console.log("🚀 ~ uploadedFilesArray:", uploadedFilesArray);
       for (let [key, value] of formData.entries()) {
         console.log(`${key}: ${value}`);
       }
+
+      uploadedFilesArray.length = 0;
+      myDropzone.removeAllFiles(true);
+      (mainForm as HTMLFormElement).reset();
+      btnSubmit?.removeAttribute("disabled");
+      const closeDrawerButton = document.getElementById("closeDrawer");
+      if (closeDrawerButton) {
+        closeDrawerButton.click();
+      }
     });
   }
-
-  document
-    .getElementById("closeDrawer")
-    ?.addEventListener("click", function () {
-      uploadedFilesArray.length = 0;
-      myDropzone.removeAllFiles(true);
-      const form = document.getElementById("mainForm") as HTMLFormElement;
-      form?.reset();
-    });
-  document
-    .getElementById("closeDrawer")
-    ?.addEventListener("click", function () {
-      uploadedFilesArray.length = 0;
-      myDropzone.removeAllFiles(true);
-      const form = document.getElementById("mainForm") as HTMLFormElement;
-      form?.reset();
-    });
-
-  mainForm?.addEventListener("submit", function (event) {
-    event.preventDefault();
-    uploadedFilesArray.length = 0;
-    myDropzone.removeAllFiles(true);
-    (mainForm as HTMLFormElement).reset();
-  });
 </script>
+
 <div
   id="drawer-create-product-default"
   class="fixed top-0 right-0 z-40 w-full h-screen max-w-xs p-4 overflow-y-auto transition-transform translate-x-full bg-white dark:bg-gray-800"
@@ -149,7 +176,11 @@
 
   <div id="uploadedFiles"></div>
 
-  <form id="mainForm">
+  <form
+    id="mainForm"
+    data-id={session?.user.id}
+    data-email={session?.user.email}
+  >
     <div class="space-y-4">
       <div>
         <label
@@ -183,6 +214,7 @@
 
       <div class="flex justify-center w-full space-x-4">
         <button
+          id="btnSubmit"
           type="submit"
           class="text-white w-full justify-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
         >
