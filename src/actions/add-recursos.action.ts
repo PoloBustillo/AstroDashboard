@@ -1,8 +1,6 @@
 import { defineAction } from "astro/actions/runtime/virtual/server.js";
 import { z } from "astro/zod";
 import { db, BlogResource, Blog } from "astro:db";
-import { put } from "@vercel/blob";
-import fs from "node:fs";
 
 export const addResource = defineAction({
   accept: "json",

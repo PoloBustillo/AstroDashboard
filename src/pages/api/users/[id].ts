@@ -4,10 +4,9 @@ import fs from "node:fs";
 
 export const GET: APIRoute = async ({ params, request }) => {
   try {
-    const data = fs.readFileSync("src/pages/api/users/test.pdf");
-    console.log(data);
+    const data = fs.readFileSync("src/pages/api/users/test.jpg");
 
-    const blob = await put("folder/file.pdf", data, {
+    const blob = await put("folder/file.jpg", data, {
       access: "public",
       token: import.meta.env.BLOB_READ_WRITE_TOKEN,
     });
@@ -16,9 +15,4 @@ export const GET: APIRoute = async ({ params, request }) => {
     console.log(error);
     return new Response("PDF failed");
   }
-
-  // data:application/pdf;base64,btoa(unescape(encodeURIComponent(evt.target.result)))
-
-  // method1Workind(evt);
-  // method2(evt);
 };

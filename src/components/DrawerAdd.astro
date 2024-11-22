@@ -55,10 +55,11 @@ const session = await getSession(Astro.request);
 
   myDropzone.on("addedfile", async function (file) {
     try {
-      const blob = await put(`/${file.name}`, file, {
+      const blob = await put(`folder/${file.name}`, file, {
         access: "public",
         token: import.meta.env.PUBLIC_BLOB_READ_WRITE_TOKEN,
       });
+
       uploadedFilesArray.push({ file, content: blob.url });
     } catch (error) {
       console.log(error);
@@ -140,12 +141,6 @@ const session = await getSession(Astro.request);
         userId: id,
         files: uploadedFilesArray.map((f) => f.content),
       });
-
-      console.log(data, error);
-
-      for (let [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
-      }
 
       uploadedFilesArray.length = 0;
       myDropzone.removeAllFiles(true);
