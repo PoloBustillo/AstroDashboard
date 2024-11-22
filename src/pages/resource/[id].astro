@@ -1,0 +1,11 @@
+---
+import LayoutSidebar from "@layouts/LayoutSidebar.astro";
+
+const { id } = Astro.params;
+---
+
+<LayoutSidebar>
+  <div class="min-h-screen mx-6">
+    <h1>Resource {id}</h1>
+  </div>
+</LayoutSidebar>

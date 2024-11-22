@@ -31,7 +31,7 @@ const images = resources ? await fetchImages(resources) : [];
           resources.map((resource, index: number) => {
             return (
               <div class="w-[20%] m-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                <a href="#">
+                <a href={`/resource/${resource.blog.id}`}>
                   <img
                     class="h-auto max-w-full rounded-lg"
                     src={images[index]}
@@ -67,13 +67,13 @@ const images = resources ? await fetchImages(resources) : [];
                     >
                       <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
                     </svg>
-                    Members only
+                    Solo miembros
                   </p>
                   <a
-                    href="#"
+                    href={`/resource/${resource.blog.id}`}
                     class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   >
-                    Read more
+                    Leer más
                     <svg
                       class="rtl:rotate-180 w-3.5 h-3.5 ms-2"
                       aria-hidden="true"
