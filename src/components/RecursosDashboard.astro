@@ -4,98 +4,9 @@ import NavPagination from "@components/NavPagination.astro";
 import DrawerAdd from "./DrawerAdd.astro";
 import DrawerEdit from "./DrawerEdit.astro";
 import DrawerRemove from "./DrawerRemove.astro";
-const products = [
-  {
-    id: 1,
-    name: "Product 1",
-    category: "Category 1",
-    technology: "React",
-    description: "Description for product 1",
-    price: 100,
-    discount: "10%",
-  },
-  {
-    id: 2,
-    name: "Product 2",
-    category: "Category 2",
-    technology: "Angular",
-    description: "Description for product 2",
-    price: 200,
-    discount: "20%",
-  },
-  {
-    id: 3,
-    name: "Product 3",
-    category: "Category 3",
-    technology: "Vue",
-    description: "Description for product 3",
-    price: 300,
-    discount: "30%",
-  },
-  {
-    id: 4,
-    name: "Product 4",
-    category: "Category 4",
-    technology: "React",
-    description: "Description for product 4",
-    price: 400,
-    discount: "40%",
-  },
-  {
-    id: 5,
-    name: "Product 5",
-    category: "Category 5",
-    technology: "Angular",
-    description: "Description for product 5",
-    price: 500,
-    discount: "50%",
-  },
-  {
-    id: 6,
-    name: "Product 6",
-    category: "Category 6",
-    technology: "Vue",
-    description: "Description for product 6",
-    price: 600,
-    discount: "60%",
-  },
-  {
-    id: 7,
-    name: "Product 7",
-    category: "Category 7",
-    technology: "React",
-    description: "Description for product 7",
-    price: 700,
-    discount: "70%",
-  },
-  {
-    id: 8,
-    name: "Product 8",
-    category: "Category 8",
-    technology: "Angular",
-    description: "Description for product 8",
-    price: 800,
-    discount: "80%",
-  },
-  {
-    id: 9,
-    name: "Product 9",
-    category: "Category 9",
-    technology: "Vue",
-    description: "Description for product 9",
-    price: 900,
-    discount: "90%",
-  },
-  {
-    id: 10,
-    name: "Product 10",
-    category: "Category 10",
-    technology: "React",
-    description: "Description for product 10",
-    price: 1000,
-    discount: "100%",
-  },
-];
+import { actions } from "astro:actions";
+const resources = await actions.getAllBlogs();
+console.log(resources);
 ---
 
 <div>
@@ -164,13 +75,13 @@ const products = [
               <tr>
                 {
                   [
-                    "Product Name",
-                    "Technology",
-                    "Description",
+                    "Titulo",
+                    "Fecha",
                     "ID",
-                    "Price",
-                    "Discount",
-                    "Actions",
+                    "Activo",
+                    "TAGS",
+                    "Usuario",
+                    "Acciones",
                   ].map((th) => (
                     <th
                       scope="col"
@@ -187,85 +98,64 @@ const products = [
               class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
             >
               {
-                products.map((product) => (
-                  <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
-                      <div class="text-base font-semibold text-gray-900 dark:text-white">
-                        <data value="name">{product.name}</data>
-                      </div>
-                      <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                        <data value="category">{product.category}</data>
-                      </div>
-                    </td>
-                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      <data value="technology">{product.technology}</data>
-                    </td>
-                    <td class="max-w-sm p-4 overflow-hidden text-base font-normal text-gray-500 truncate xl:max-w-xs dark:text-gray-400">
-                      <data value="description">{product.description}</data>
-                    </td>
-                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      #<data value="id">{product.id}</data>
-                    </td>
-                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      <data value="price">{product.price}</data>
-                    </td>
-                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      <data value="discount">{product.discount}</data>
-                    </td>
+                resources.data &&
+                  resources.data.map((resource) => (
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                      <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
+                        <div class="text-base font-semibold text-gray-900 dark:text-white">
+                          <data value="name">{resource.blog.title}</data>
+                        </div>
+                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                          <data value="description">
+                            {resource.blog.description}
+                          </data>
+                        </div>
+                      </td>
+                      <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <data value="fecha">
+                          {new Date(resource.blog.createdAt).toLocaleString()}
+                        </data>
+                      </td>
+                      <td class="max-w-sm p-4 overflow-hidden text-base font-normal text-gray-500 truncate xl:max-w-xs dark:text-gray-400">
+                        <data value="id"> {resource.blog.id}</data>
+                      </td>
+                      <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <data value="activo"> {resource.blog.isActive}</data>
+                      </td>
+                      <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <data value="tags"> {resource.blog.tags}</data>
+                      </td>
+                      <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <data value="usuarios"> {resource.blog.user}</data>
+                      </td>
 
-                    <td class="p-4 space-x-2 whitespace-nowrap">
-                      <button
-                        type="button"
-                        id="updateProductButton"
-                        data-drawer-target="drawer-update-product-default"
-                        data-drawer-show="drawer-update-product-default"
-                        aria-controls="drawer-update-product-default"
-                        data-drawer-placement="right"
-                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                      >
-                        <svg
-                          class="w-4 h-4 mr-2"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
+                      <td class="p-4 space-x-2 whitespace-nowrap">
+                        <button
+                          type="button"
+                          id="deleteProductButton"
+                          data-drawer-target="drawer-delete-product-default"
+                          data-drawer-show="drawer-delete-product-default"
+                          aria-controls="drawer-delete-product-default"
+                          data-drawer-placement="right"
+                          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
                         >
-                          <svg>
-                            <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                          <svg
+                            class="w-4 h-4 mr-2"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
                             <path
                               fill-rule="evenodd"
-                              d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
+                              d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
                               clip-rule="evenodd"
                             />
                           </svg>
-                        </svg>
-                        Update
-                      </button>
-                      <button
-                        type="button"
-                        id="deleteProductButton"
-                        data-drawer-target="drawer-delete-product-default"
-                        data-drawer-show="drawer-delete-product-default"
-                        aria-controls="drawer-delete-product-default"
-                        data-drawer-placement="right"
-                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
-                      >
-                        <svg
-                          class="w-4 h-4 mr-2"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                        Delete item
-                      </button>
-                    </td>
-                  </tr>
-                ))
+                          Eliminar
+                        </button>
+                      </td>
+                    </tr>
+                  ))
               }
             </tbody>
           </table>

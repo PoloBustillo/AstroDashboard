@@ -151,10 +151,11 @@ const session = await getSession(Astro.request);
       myDropzone.removeAllFiles(true);
       (mainForm as HTMLFormElement).reset();
       btnSubmit?.removeAttribute("disabled");
-      const closeDrawerButton = document.getElementById("closeDrawer");
-      if (closeDrawerButton) {
-        closeDrawerButton.click();
-      }
+      // const closeDrawerButton = document.getElementById("closeDrawer");
+      // if (closeDrawerButton) {
+      //   closeDrawerButton.click();
+      // }
+      window.location.reload();
     });
   }
 </script>
