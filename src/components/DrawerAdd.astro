@@ -134,15 +134,11 @@ const session = await getSession(Astro.request);
       const title = formData.get("title") as string;
       const description = formData.get("description") as string;
 
-      console.log(
-        "🚀 ~ mainForm.addEventListener ~ uploadedFilesArray:",
-        uploadedFilesArray[0],
-      );
       const { data, error } = await actions.addResource({
         title,
         description,
         userId: id,
-        files: uploadedFilesArray,
+        files: uploadedFilesArray.map((f) => f.content),
       });
 
       console.log(data, error);
