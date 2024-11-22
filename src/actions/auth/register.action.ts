@@ -41,7 +41,6 @@ export const registerUser = defineAction({
 
       const result = await db.insert(User).values(newUser);
       const { password: _, ...user } = newUser;
-      console.log("User created successfully", result);
 
       return { message: "Usuario creado exitosamente", user: user };
     } catch (error: unknown) {

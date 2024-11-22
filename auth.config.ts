@@ -49,7 +49,10 @@ const checkIfUserExistsOrCreate = async (profile: Partial<Profile>) => {
 
     await db.insert(User).values(user);
 
-    return user;
+    return {
+      ...user,
+      idUser: user.id,
+    };
   }
 };
 
@@ -83,11 +86,15 @@ export default defineConfig({
             email,
             image: existingUser[0].image,
             id: existingUser[0].id,
+            idUser: existingUser[0].id,
             isActive: existingUser[0].isActive,
             createdAt: existingUser[0].createdAt,
             role: existingUser[0].role,
           } as UserType;
-          return user;
+          return {
+            ...user,
+            idUser: user.id,
+          };
         } catch (error: unknown) {
           console.error("Error creating user", error);
           const e = normalizeError(error);
@@ -115,7 +122,7 @@ export default defineConfig({
           image: user.image,
           name: user.name,
           role: user.role,
-          id: user.id,
+          idUser: user.id,
         };
       },
     }),
@@ -134,7 +141,7 @@ export default defineConfig({
           image: user.image,
           name: user.name,
           role: user.role,
-          id: user.id,
+          idUser: user.id,
         };
       },
     }),
@@ -146,14 +153,13 @@ export default defineConfig({
           ...profile,
           id: profile.id?.toString(),
         });
-        console.log("🚀 ~ profile ~ user:", user);
         return {
           email: user.email,
           isActive: user.isActive,
           image: user.image,
           name: user.name,
           role: user.role,
-          id: user.id,
+          idUser: user.id,
         };
       },
     }),
@@ -173,6 +179,7 @@ export default defineConfig({
           name: user.name,
           role: user.role,
           id: user.id,
+          idUser: user.id,
         };
       },
     }),
@@ -188,7 +195,7 @@ export default defineConfig({
     },
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
+        token.idUser = user.idUser;
         token.role = user.role;
         token.isActive = user.isActive;
       }
@@ -203,7 +210,7 @@ export default defineConfig({
       } else {
         session.user.role = "user";
       }
-      if (token?.id) session.user.id = token.id as string;
+      if (token?.idUser) session.user.idUser = token.idUser as string;
       if (token?.role) session.user.role = token.role as string;
       if (token?.isActive) session.user.isActive = token.isActive as boolean;
 

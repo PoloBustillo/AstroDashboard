@@ -35,7 +35,7 @@ export const Blog = defineTable({
 export const BlogResource = defineTable({
   columns: {
     id: column.text({ primaryKey: true }),
-    productId: column.text({ references: () => Blog.columns.id }),
+    blogId: column.text({ references: () => Blog.columns.id }),
     url: column.text(),
   },
 });

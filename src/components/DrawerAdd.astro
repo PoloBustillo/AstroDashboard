@@ -2,7 +2,6 @@
 import { getSession } from "auth-astro/server";
 
 const session = await getSession(Astro.request);
-const email = session?.user.email;
 ---
 
 <script>
@@ -101,10 +100,9 @@ const email = session?.user.email;
         title,
         description,
         userId: id,
+        files: uploadedFilesArray,
       });
 
-      console.log("Form Data:");
-      console.log("🚀 ~ uploadedFilesArray:", uploadedFilesArray);
       for (let [key, value] of formData.entries()) {
         console.log(`${key}: ${value}`);
       }
@@ -175,7 +173,7 @@ const email = session?.user.email;
 
   <form
     id="mainForm"
-    data-id={session?.user.id}
+    data-id={session?.user.idUser}
     data-email={session?.user.email}
   >
     <div class="space-y-4">

@@ -26,6 +26,6 @@ export type BlogType = {
 
 export type BlogResourceType = {
   id: string;
-  productId: string;
+  blogId: string;
   url: string;
 };

@@ -9,11 +9,12 @@ export const addResource = defineAction({
     description: z.string(),
     tags: z.array(z.string()).optional(),
     userId: z.string().uuid(),
+    files: z.array(z.any()).optional(),
   }),
   handler: async (data) => {
-    const { title, description, tags, userId } = data;
+    const { title, description, tags, userId, files } = data;
     try {
-      console.log(userId);
+      console.log(files);
       const newBlog = await db
         .insert(Blog)
         .values({
@@ -27,12 +28,16 @@ export const addResource = defineAction({
         })
         .returning();
       console.log(newBlog);
-      const url = "https://example.com"; // Define the URL variable
-      await db.insert(BlogResource).values({
-        id: crypto.randomUUID(),
-        productId: newBlog[0].id,
-        url,
-      });
+
+      if (files) {
+        for (const file of files) {
+          await db.insert(BlogResource).values({
+            id: crypto.randomUUID(),
+            blogId: newBlog[0].id,
+            url: "file.url",
+          });
+        }
+      }
 
       return newBlog;
     } catch (error) {

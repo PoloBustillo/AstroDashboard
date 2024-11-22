@@ -55,12 +55,12 @@ export default async function seed() {
   const blogResources = [
     {
       id: "1",
-      productId: "1",
+      blogId: "1",
       url: "https://example.com/tech-blog",
     },
     {
       id: "2",
-      productId: "2",
+      blogId: "2",
       url: "https://example.com/lifestyle-blog",
     },
   ];

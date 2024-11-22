@@ -5,11 +5,13 @@ export declare module "@auth/core/types" {
     user: {
       id: string;
       role: string;
+      idUser: string;
       isActive: boolean;
     } & DefaultSession["user"];
   }
   interface User extends DefaultSession["user"] {
     id: string;
+    idUser: string;
     role: string;
     isActive: boolean;
   }
