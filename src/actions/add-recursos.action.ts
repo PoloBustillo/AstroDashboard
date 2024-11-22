@@ -12,27 +12,32 @@ export const addResource = defineAction({
   }),
   handler: async (data) => {
     const { title, description, tags, userId } = data;
-
-    const newBlog = await db
-      .insert(Blog)
-      .values({
+    try {
+      console.log(userId);
+      const newBlog = await db
+        .insert(Blog)
+        .values({
+          id: crypto.randomUUID(),
+          user: userId,
+          tags: tags ? tags.join(",") : "",
+          description,
+          isActive: true,
+          title,
+          createdAt: new Date(),
+        })
+        .returning();
+      console.log(newBlog);
+      const url = "https://example.com"; // Define the URL variable
+      await db.insert(BlogResource).values({
         id: crypto.randomUUID(),
-        user: userId,
-        tags: tags ? tags.join(",") : "",
-        description,
-        isActive: true,
-        title,
-        createdAt: new Date(),
-      })
-      .returning();
+        productId: newBlog[0].id,
+        url,
+      });
 
-    const url = "https://example.com"; // Define the URL variable
-    await db.insert(BlogResource).values({
-      id: crypto.randomUUID(),
-      productId: newBlog[0].id,
-      url,
-    });
-
-    return newBlog;
+      return newBlog;
+    } catch (error) {
+      console.error("Error adding resource: ", error);
+      return null;
+    }
   },
 });

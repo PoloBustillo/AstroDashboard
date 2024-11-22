@@ -90,9 +90,6 @@ const email = session?.user.email;
       const id = target.dataset.id ?? "";
       const email = target.dataset.email ?? "";
 
-      console.log("ID:", id);
-      console.log("Email:", email);
-
       const btnSubmit = document.querySelector("#btnSubmit");
       btnSubmit?.setAttribute("disabled", "disabled");
       const formData = new FormData(event.target as HTMLFormElement);
