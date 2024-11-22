@@ -1,0 +1,14 @@
+{
+  "blog": {
+    "id": "2",
+    "user": "2",
+    "tags": "lifestyle, health",
+    "description": "A blog about lifestyle and health",
+    "isActive": true,
+    "title": "Lifestyle Blog",
+    "createdAt": "2024-11-22T17:44:52.000Z"
+  },
+  "blogResources": [
+    { "id": "2", "blogId": "2", "url": "https://example.com/lifestyle-blog" }
+  ]
+}
