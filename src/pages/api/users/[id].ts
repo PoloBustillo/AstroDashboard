@@ -4,9 +4,7 @@ import fs from "node:fs";
 
 export const GET: APIRoute = async ({ params, request }) => {
   try {
-    const data = fs.readFileSync(
-      "C:/Users/leopo/OneDrive/Escritorio/astroDashboard/src/pages/api/users/test.pdf",
-    );
+    const data = fs.readFileSync("src/pages/api/users/test.pdf");
     console.log(data);
 
     const blob = await put("folder/file.pdf", data, {

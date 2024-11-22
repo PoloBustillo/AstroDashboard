@@ -1,6 +1,8 @@
 import { defineAction } from "astro/actions/runtime/virtual/server.js";
 import { z } from "astro/zod";
 import { db, BlogResource, Blog } from "astro:db";
+import { put } from "@vercel/blob";
+import fs from "node:fs";
 
 export const addResource = defineAction({
   accept: "json",
@@ -9,12 +11,12 @@ export const addResource = defineAction({
     description: z.string(),
     tags: z.array(z.string()).optional(),
     userId: z.string().uuid(),
-    files: z.array(z.any()).optional(),
+    files: z.array(z.string()).optional(),
   }),
   handler: async (data) => {
     const { title, description, tags, userId, files } = data;
+
     try {
-      console.log(files);
       const newBlog = await db
         .insert(Blog)
         .values({
@@ -27,14 +29,13 @@ export const addResource = defineAction({
           createdAt: new Date(),
         })
         .returning();
-      console.log(newBlog);
 
       if (files) {
         for (const file of files) {
           await db.insert(BlogResource).values({
             id: crypto.randomUUID(),
             blogId: newBlog[0].id,
-            url: "file.url",
+            url: file,
           });
         }
       }

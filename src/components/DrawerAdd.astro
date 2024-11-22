@@ -8,6 +8,7 @@ const session = await getSession(Astro.request);
   import { actions } from "astro:actions";
   import Dropzone from "dropzone";
   import "dropzone/dist/dropzone.css";
+  import { put, del } from "@vercel/blob";
 
   var myDropzone = new Dropzone("#dropzoneform", {
     thumbnail: function (file, dataUrl) {
@@ -50,31 +51,68 @@ const session = await getSession(Astro.request);
     addRemoveLinks: true,
   });
 
-  const uploadedFilesArray: File[] = [];
+  const uploadedFilesArray: { file: File; content: string }[] = [];
 
-  myDropzone.on("addedfile", function (file) {
-    uploadedFilesArray.push(file);
+  myDropzone.on("addedfile", async function (file) {
+    try {
+      const blob = await put(`/${file.name}`, file, {
+        access: "public",
+        token: import.meta.env.PUBLIC_BLOB_READ_WRITE_TOKEN,
+      });
+      uploadedFilesArray.push({ file, content: blob.url });
+    } catch (error) {
+      console.log(error);
+    }
+    return file;
   });
 
-  myDropzone.on("removedfile", function (file) {
-    const index = uploadedFilesArray.findIndex((f) => f.name === file.name);
+  myDropzone.on("removedfile", async function (file) {
+    const index = uploadedFilesArray.findIndex(
+      (f) => f.file.name === file.name,
+    );
     if (index !== -1) {
-      uploadedFilesArray.splice(index, 1);
+      try {
+        await del(uploadedFilesArray[index].content, {
+          token: import.meta.env.PUBLIC_BLOB_READ_WRITE_TOKEN,
+        });
+        uploadedFilesArray.splice(index, 1);
+      } catch (error) {
+        console.log(error);
+      }
     }
   });
 
   document
     .getElementById("closeDrawer")
-    ?.addEventListener("click", function () {
+    ?.addEventListener("click", async function () {
+      for (const file of uploadedFilesArray) {
+        try {
+          await del(file.content, {
+            token: import.meta.env.PUBLIC_BLOB_READ_WRITE_TOKEN,
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
       uploadedFilesArray.length = 0;
       myDropzone.removeAllFiles(true);
       const form = document.getElementById("mainForm") as HTMLFormElement;
       form?.reset();
     });
   document
-    .getElementById("closeDrawer")
-    ?.addEventListener("click", function () {
+    .getElementById("cancelButton")
+    ?.addEventListener("click", async function () {
+      for (const file of uploadedFilesArray) {
+        try {
+          await del(file.content, {
+            token: import.meta.env.PUBLIC_BLOB_READ_WRITE_TOKEN,
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
       uploadedFilesArray.length = 0;
+
       myDropzone.removeAllFiles(true);
       const form = document.getElementById("mainForm") as HTMLFormElement;
       form?.reset();
@@ -96,12 +134,18 @@ const session = await getSession(Astro.request);
       const title = formData.get("title") as string;
       const description = formData.get("description") as string;
 
+      console.log(
+        "🚀 ~ mainForm.addEventListener ~ uploadedFilesArray:",
+        uploadedFilesArray[0],
+      );
       const { data, error } = await actions.addResource({
         title,
         description,
         userId: id,
         files: uploadedFilesArray,
       });
+
+      console.log(data, error);
 
       for (let [key, value] of formData.entries()) {
         console.log(`${key}: ${value}`);
