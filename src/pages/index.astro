@@ -24,13 +24,13 @@ const images = resources ? await fetchImages(resources) : [];
 ---
 
 <LayoutSidebar>
-  <div class="min-h-screen m-3 align-middle flex pb-[12vh]">
-    <div class="flex flex-wrap justify-center m-6">
+  <div class="min-h-screen lg:m-3 m-2 align-middle flex lg:pb-[12vh]">
+    <div class="flex flex-wrap justify-center lg:m-6 m-2">
       {
         resources &&
           resources.map((resource, index: number) => {
             return (
-              <div class="w-[20%] m-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+              <div class="lg:w-[25%] max-h-[100%] sm:w-[40%] lg:m-6 m-2 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                 <a href={`/resource/${resource.blog.id}`}>
                   <img
                     class="h-auto max-w-full rounded-lg"
