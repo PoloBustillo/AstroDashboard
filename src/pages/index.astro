@@ -35,8 +35,9 @@ const images = resources ? await fetchImages(resources) : [];
                   <img
                     class="h-auto max-w-full rounded-lg"
                     src={
-                      (images[index] && images[index] !== "") ||
-                      "https://codeparrot.ai/_next/image?url=https%3A%2F%2Fdropinblog.net%2F34256781%2Ffiles%2Ffeatured%2Fastrojs-getting-started-with-astrojs-static-site-generator.png&w=1080&q=75"
+                      images[index] && images[index] !== ""
+                        ? images[index]
+                        : "https://codeparrot.ai/_next/image?url=https%3A%2F%2Fdropinblog.net%2F34256781%2Ffiles%2Ffeatured%2Fastrojs-getting-started-with-astrojs-static-site-generator.png&w=1080&q=75"
                     }
                     alt={resource.blog.title}
                   />
