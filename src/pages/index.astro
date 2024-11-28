@@ -2,17 +2,23 @@
 import LayoutSidebar from "@layouts/LayoutSidebar.astro";
 import type { BlogData } from "@utils/types";
 import { actions } from "astro:actions";
+import { getSession } from "auth-astro/server";
 
 const resources = (await actions.getAllBlogs()).data as BlogData[];
 const users = await actions.getAllUsers();
-resources.map(async (resource) => {
-  const user = users.data?.filter((user) => {
-    if (user.id === resource.blog.user) {
-      return user;
-    }
-  });
-  return resource;
-});
+const resourcesWithUser = await Promise.all(
+  resources.map(async (resource) => {
+    const user = await users.data?.find((user) => {
+      if (user.id === resource.blog.user) {
+        return true;
+      }
+      return false;
+    });
+
+    return { ...resource, user: user };
+  }),
+);
+
 async function fetchImages(resources: BlogData[]) {
   const clientId = "KDA53jGTYRZLPYTYshm2-W5nLtOq77gM8d4UWRX6YO4";
   const images = await Promise.all(
@@ -29,17 +35,25 @@ async function fetchImages(resources: BlogData[]) {
 }
 
 const images = resources ? await fetchImages(resources) : [];
+const session = await getSession(Astro.request);
 ---
 
 <LayoutSidebar>
   <div class="lg:m-3 m-2 align-middle flex lg:pb-[12vh]">
     <div class="flex flex-wrap max-h-[100%] justify-center lg:m-6 m-2">
       {
-        resources &&
-          resources.map((resource, index: number) => {
+        resourcesWithUser &&
+          resourcesWithUser.map((resource, index: number) => {
             return (
               <div class="lg:w-[25%] max-h-[100%] sm:w-[40%] lg:m-6 m-2 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                <a href={`/resource/${resource.blog.id}`}>
+                <a
+                  class:list={[
+                    {
+                      "pointer-events-none": session == null,
+                    },
+                  ]}
+                  href={`/resource/${resource.blog.id}`}
+                >
                   <img
                     class="h-auto max-w-full rounded-lg"
                     src={
@@ -54,12 +68,18 @@ const images = resources ? await fetchImages(resources) : [];
                 <div class="p-5">
                   <div class="flex m-auto items-center">
                     <img
-                      class="w-10 h-10 rounded-full mr-4"
-                      src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fdilemaveche.ro%2Fsectiune%2Ftema-saptamanii%2Fcomunism-si-reziduuri-postdecembriste-601838.html&psig=AOvVaw3pNs7sIePaKJGuQBieUpOJ&ust=1730949883215000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCJixmfvgxokDFQAAAAAdAAAAABAE"
-                      alt="Avatar of Jonathan Reinink"
+                      class="w-8 h-8 rounded-full mr-4 border-2 border-lime-700"
+                      src={
+                        resource.user?.image
+                          ? resource.user.image
+                          : "/avatar.svg"
+                      }
+                      alt={resource.user?.name}
                     />
                     <div class="text-sm">
-                      <p class="text-gray-900 leading-none">Jonathan Reinink</p>
+                      <p class="text-gray-900 leading-none">
+                        {resource.user?.name ? resource.user.name : "Anónimo"}
+                      </p>
                       <p class="text-gray-600">
                         {new Date(resource.blog.createdAt).toLocaleString()}
                       </p>
@@ -71,19 +91,27 @@ const images = resources ? await fetchImages(resources) : [];
                   <p class="text-gray-700 text-base">
                     {resource.blog.description}
                   </p>
-                  <p class="text-sm text-gray-600 flex items-center">
-                    <svg
-                      class="fill-current text-gray-500 w-3 h-3 mr-2"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
-                    </svg>
-                    Solo miembros
-                  </p>
+                  {!session && (
+                    <p class="text-sm text-gray-600 flex items-center">
+                      <svg
+                        class="fill-current text-gray-500 w-3 h-3 mr-2"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
+                      </svg>
+                      Solo miembros
+                    </p>
+                  )}
                   <a
                     href={`/resource/${resource.blog.id}`}
-                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    class:list={[
+                      "inline-flex cursor-pointer pointer-events-auto items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800",
+                      {
+                        "cursor-default opacity-60 pointer-events-none":
+                          session == null,
+                      },
+                    ]}
                   >
                     Leer más
                     <svg
