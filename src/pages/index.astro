@@ -4,7 +4,15 @@ import type { BlogData } from "@utils/types";
 import { actions } from "astro:actions";
 
 const resources = (await actions.getAllBlogs()).data as BlogData[];
-
+const users = await actions.getAllUsers();
+resources.map(async (resource) => {
+  const user = users.data?.filter((user) => {
+    if (user.id === resource.blog.user) {
+      return user;
+    }
+  });
+  return resource;
+});
 async function fetchImages(resources: BlogData[]) {
   const clientId = "KDA53jGTYRZLPYTYshm2-W5nLtOq77gM8d4UWRX6YO4";
   const images = await Promise.all(
