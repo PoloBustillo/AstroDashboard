@@ -23,9 +23,11 @@ export const User = defineTable({
 export const Blog = defineTable({
   columns: {
     id: column.text({ primaryKey: true }),
+    private: column.boolean({ default: false }),
     user: column.text({ references: () => User.columns.id }),
-    tags: column.text(),
+    tags: column.text({ optional: true }),
     description: column.text(),
+    content: column.text(),
     isActive: column.boolean(),
     title: column.text(),
     createdAt: column.date({ default: new Date() }),
@@ -37,6 +39,7 @@ export const BlogResource = defineTable({
     id: column.text({ primaryKey: true }),
     blogId: column.text({ references: () => Blog.columns.id }),
     url: column.text(),
+    type: column.text(),
   },
 });
 

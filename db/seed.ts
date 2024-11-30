@@ -49,6 +49,8 @@ export default async function seed() {
       description: "A blog about tech and programming",
       isActive: true,
       title: "Tech Blog",
+      content:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
       createdAt: NOW,
     },
     {
@@ -58,6 +60,8 @@ export default async function seed() {
       description: "A blog about lifestyle and health",
       isActive: true,
       title: "Corgi Blog",
+      content:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
       createdAt: NOW,
     },
     {
@@ -67,6 +71,8 @@ export default async function seed() {
       description: "A blog about travel and adventure",
       isActive: true,
       title: "Travel Blog",
+      content:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
       createdAt: NOW,
     },
     {
@@ -76,6 +82,8 @@ export default async function seed() {
       description: "A blog about food and recipes",
       isActive: true,
       title: "Food Blog",
+      content:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
       createdAt: NOW,
     },
     {
@@ -85,6 +93,8 @@ export default async function seed() {
       description: "A blog about fitness and wellness",
       isActive: true,
       title: "Fitness Blog",
+      content:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
       createdAt: NOW,
     },
     {
@@ -94,6 +104,8 @@ export default async function seed() {
       description: "A blog about finance and investing",
       isActive: true,
       title: "Finance Blog",
+      content:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
       createdAt: NOW,
     },
     {
@@ -103,6 +115,8 @@ export default async function seed() {
       description: "A blog about education and learning",
       isActive: true,
       title: "Education Blog",
+      content:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
       createdAt: NOW,
     },
   ];
