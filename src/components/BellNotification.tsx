@@ -23,10 +23,7 @@ const BellNotification = ({
   const [isVisible, setisVisible] = useState(false);
 
   return (
-    <KnockProvider
-      apiKey={apiKey}
-      userId={user.id || "c609008f-2646-49c8-83a6-7465f76884ef"}
-    >
+    <KnockProvider apiKey={apiKey} userId={user.idUser}>
       <KnockFeedProvider feedId={feedId}>
         <>
           <div className="text-black dark:text-white">

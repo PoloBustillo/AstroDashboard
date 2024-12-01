@@ -5,18 +5,11 @@ import { getSession } from "auth-astro/server";
 const session = await getSession(Astro.request);
 ---
 
-<script>
-  import Knock from "@knocklabs/client";
-  const knockClient = new Knock(import.meta.env.PUBLIC_KNOCK_PUBLIC_API_KEY);
-  // console.log("🚀 ~ user.id:", session?.user.id);
-  knockClient.authenticate("1");
-</script>
-
 <LayoutSidebar>
   <div class="h-min-[50vh] h-[50vh] py-8 lg:px-28 px-2">
     <NotificationInbox
       client:idle
-      userId={session?.user.id ?? ""}
+      userId={session?.user.idUser ?? ""}
       apiKey={import.meta.env.PUBLIC_KNOCK_PUBLIC_API_KEY}
       feedId={import.meta.env.PUBLIC_KNOCK_FEED_CHANNEL_ID}
     />

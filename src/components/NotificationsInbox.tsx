@@ -36,10 +36,7 @@ const NotificationInbox = ({
   }, []);
 
   return (
-    <KnockProvider
-      apiKey={apiKey}
-      userId={"c609008f-2646-49c8-83a6-7465f76884ef"}
-    >
+    <KnockProvider apiKey={apiKey} userId={userId}>
       <KnockFeedProvider colorMode={colorTheme} feedId={feedId}>
         <>
           <NotificationFeed
