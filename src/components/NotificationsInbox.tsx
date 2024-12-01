@@ -2,15 +2,10 @@ import {
   KnockProvider,
   KnockFeedProvider,
   NotificationFeed,
-  NotificationIconButton,
-  NotificationFeedPopover,
   NotificationCell,
-  Avatar,
 } from "@knocklabs/react";
 
 import "@knocklabs/react/dist/index.css";
-
-import type { User } from "@auth/core/types";
 import { useEffect, useState, useRef } from "react";
 import type {
   ColorMode,

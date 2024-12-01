@@ -8,7 +8,7 @@ import {
 import "@knocklabs/react/dist/index.css";
 
 import type { User } from "@auth/core/types";
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 
 const BellNotification = ({
   user,
