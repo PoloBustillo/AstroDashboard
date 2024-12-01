@@ -3,12 +3,22 @@ import LayoutSidebar from "@layouts/LayoutSidebar.astro";
 ---
 
 <LayoutSidebar>
-  <div class="min-h-screen m-3 align-middle flex pb-[12vh] text-white">
-    <h1>Machine Learning</h1>
-
-    <h1>TensorFlow.js example</h1>
-    <input type="file" id="file-upload" accept="image/*" />
-    <img id="img" style="display:none;" />
+  <div
+    class="min-h-screen m-3 flex flex-col items-center justify-center pb-[12vh] text-white"
+  >
+    <h1 class="text-4xl font-bold mb-4">Machine Learning</h1>
+    <h2 class="text-2xl mb-6">TensorFlow.js Example</h2>
+    <input
+      type="file"
+      id="file-upload"
+      accept="image/*"
+      class="mb-4 p-2 border border-gray-300 rounded-md"
+    />
+    <img
+      id="img"
+      class="max-w-full h-auto rounded-md shadow-lg"
+      style="display:none;"
+    />
   </div>
 
   <script>
@@ -37,6 +47,15 @@ import LayoutSidebar from "@layouts/LayoutSidebar.astro";
                 model.classify(img).then((predictions) => {
                   console.log("Predictions: ");
                   console.log(predictions);
+                  const predictionsContainer = document.createElement("div");
+                  predictionsContainer.className =
+                    "mt-4 p-4 border border-gray-300 rounded-md bg-white text-black";
+                  predictions.forEach((prediction) => {
+                    const predictionElement = document.createElement("p");
+                    predictionElement.textContent = `${prediction.className}: ${prediction.probability.toFixed(2)}`;
+                    predictionsContainer.appendChild(predictionElement);
+                  });
+                  img.parentNode?.appendChild(predictionsContainer);
                 });
               });
             } else {
