@@ -7,17 +7,22 @@ import LayoutSidebar from "@layouts/LayoutSidebar.astro";
     class="min-h-screen m-3 flex flex-col items-center justify-center pb-[12vh] text-white"
   >
     <h1 class="text-4xl font-bold mb-4">Machine Learning</h1>
-    <h2 class="text-2xl mb-6">TensorFlow.js Example</h2>
+    <h2 class="text-2xl mb-6">TensorFlow.js Ejemplo</h2>
+    <label for="file-upload" class="mb-2 block text-lg font-medium text-center"
+      >Elegir archivo</label
+    >
     <input
       type="file"
       id="file-upload"
       accept="image/*"
-      class="mb-4 p-2 border border-gray-300 rounded-md"
+      class="mb-4 p-2 border border-gray-300 rounded-md text-center"
     />
     <img
       id="img"
       class="max-w-full h-auto rounded-md shadow-lg"
       style="display:none;"
+      width="300"
+      height="auto"
     />
   </div>
 
@@ -49,19 +54,18 @@ import LayoutSidebar from "@layouts/LayoutSidebar.astro";
                   console.log(predictions);
                   const predictionsContainer = document.createElement("div");
                   predictionsContainer.className =
-                    "mt-4 p-4 border border-gray-300 rounded-md bg-white text-black";
+                    "mt-4 p-6 border border-gray-300 rounded-lg bg-white text-black shadow-lg max-w-md w-full";
                   predictions.forEach((prediction) => {
                     const predictionElement = document.createElement("p");
-                    predictionElement.textContent = `${prediction.className}: ${prediction.probability.toFixed(2)}`;
+                    predictionElement.className = "text-lg font-semibold mb-2";
+                    predictionElement.textContent = `${prediction.className}: ${(prediction.probability * 100).toFixed(2)}%`;
                     predictionsContainer.appendChild(predictionElement);
                   });
                   img.parentNode?.appendChild(predictionsContainer);
                 });
               });
             } else {
-              console.error(
-                "Image element not found or is not an HTMLImageElement",
-              );
+              console.error("No se pudo cargar la imagen");
             }
           };
         }
