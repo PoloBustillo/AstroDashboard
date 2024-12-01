@@ -1,0 +1,20 @@
+.rnf-notification-feed__knock-branding {
+  display: none;
+}
+.rnf-notification-cell__content {
+  color: black !important;
+}
+
+.dark .rnf-notification-cell__content {
+  color: rgb(255, 255, 255) !important;
+}
+.rnf-notification-cell:hover,
+.rnf-notification-cell:focus,
+.rnf-notification-cell:active {
+  background-color: #f5f5f5;
+}
+.dark .rnf-notification-cell:hover,
+.dark .rnf-notification-cell:focus,
+.dark .rnf-notification-cell:active {
+  background-color: #101827;
+}

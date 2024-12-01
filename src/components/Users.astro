@@ -63,12 +63,6 @@ const users = (await actions.getAllUsers()).data;
                   scope="col"
                   class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400"
                 >
-                  ID
-                </th>
-                <th
-                  scope="col"
-                  class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400"
-                >
                   Nombre
                 </th>
                 <th
@@ -83,12 +77,7 @@ const users = (await actions.getAllUsers()).data;
                 >
                   Activo
                 </th>
-                <th
-                  scope="col"
-                  class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400"
-                >
-                  Creado
-                </th>
+
                 <th
                   scope="col"
                   class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400"
@@ -110,9 +99,6 @@ const users = (await actions.getAllUsers()).data;
                 (users ?? []).map((user) => (
                   <div>
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                      <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {user.id}
-                      </td>
                       <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
                         <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
                           <div class="text-base font-semibold text-gray-900 dark:text-white">
@@ -148,11 +134,7 @@ const users = (await actions.getAllUsers()).data;
                           {user.isActive}
                         </div>
                       </td>
-                      <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {new Date(user.createdAt).toLocaleString("en-US", {
-                          timeZone: "America/Mexico_City",
-                        })}
-                      </td>
+
                       <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         {user.role}
                       </td>

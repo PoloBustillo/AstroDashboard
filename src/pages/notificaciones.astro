@@ -6,7 +6,7 @@ const session = await getSession(Astro.request);
 ---
 
 <LayoutSidebar>
-  <div class="h-min-[50vh] h-[50vh] py-8 lg:px-28 px-2">
+  <div class="h-min-[50vh] p-4">
     <NotificationInbox
       client:idle
       userId={session?.user.idUser ?? ""}

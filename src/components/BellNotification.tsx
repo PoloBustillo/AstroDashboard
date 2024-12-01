@@ -3,8 +3,11 @@ import {
   KnockFeedProvider,
   NotificationFeedPopover,
   NotificationIconButton,
+  type NotificationFeedHeaderProps,
+  FilterStatus,
+  NotificationCell,
 } from "@knocklabs/react";
-
+import "./BellNotification.css";
 import "@knocklabs/react/dist/index.css";
 
 import type { User } from "@auth/core/types";
@@ -48,6 +51,37 @@ const BellNotification = ({
             buttonRef={notifButtonRef}
             isVisible={isVisible}
             onClose={() => setisVisible(false)}
+            renderItem={({ item, ...props }) => (
+              <div className="dark:bg-gray-600 dark:text-white!important">
+                <NotificationCell {...props} item={item} />
+              </div>
+            )}
+            renderHeader={(props: NotificationFeedHeaderProps) => (
+              <div className="dark:text-white text-gray-500 flex flex-col sm:flex-row items-center justify-between px-4 py-2 dark:bg-gray-700 space-y-2 sm:space-y-0">
+                <div>
+                  <select
+                    onChange={(e) => {
+                      const filter = e.target.value as FilterStatus;
+
+                      props.setFilterStatus(filter);
+                    }}
+                    className="bg-white dark:bg-gray-800 text-gray-700 dark:text-white border border-gray-300 dark:border-gray-600 rounded-md px-2 py-1"
+                  >
+                    <option value="all">Todas</option>
+                    <option value="unread">No leídas</option>
+                    <option value="read">Leídas</option>
+                  </select>
+                </div>
+                <div>
+                  <button
+                    onClick={(e) => props.onMarkAllAsReadClick?.(e, [])}
+                    className="text-blue-500"
+                  >
+                    Marcar todas como leídas
+                  </button>
+                </div>
+              </div>
+            )}
           />
         </>
       </KnockFeedProvider>
