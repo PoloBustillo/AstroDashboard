@@ -11,7 +11,7 @@ export const getResourceById = defineAction({
     const resources = await db
       .select()
       .from(BlogResource)
-      .where(eq(BlogResource.id, id));
+      .where(eq(BlogResource.blogId, id));
     const blog = await db.select().from(Blog).where(eq(Blog.id, id));
     if (blog.length > 0) {
       return { blog: blog[0], blogResources: resources };

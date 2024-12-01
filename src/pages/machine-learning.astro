@@ -5,5 +5,27 @@ import LayoutSidebar from "@layouts/LayoutSidebar.astro";
 <LayoutSidebar>
   <div class="min-h-screen m-3 align-middle flex pb-[12vh] text-white">
     <h1>Machine Learning</h1>
+
+    <h1>TensorFlow.js example</h1>
+    <img id="img" src="/cat.jpg" />
   </div>
+
+  <script>
+    import * as tf from "@tensorflow/tfjs";
+    import * as mobilenet from "@tensorflow-models/mobilenet";
+    const img = document.getElementById("img");
+
+    if (img instanceof HTMLImageElement) {
+      // Load the model.
+      mobilenet.load().then((model) => {
+        // Classify the image.
+        model.classify(img).then((predictions) => {
+          console.log("Predictions: ");
+          console.log(predictions);
+        });
+      });
+    } else {
+      console.error("Image element not found or is not an HTMLImageElement");
+    }
+  </script>
 </LayoutSidebar>
