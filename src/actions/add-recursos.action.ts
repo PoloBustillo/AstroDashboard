@@ -9,12 +9,14 @@ export const addResource = defineAction({
   input: z.object({
     title: z.string(),
     description: z.string(),
-    tags: z.array(z.string()).optional(),
     userId: z.string().uuid(),
     files: z.array(z.string()).optional(),
+    tags: z.string().optional(),
+    type: z.string().optional(),
+    content: z.string().optional(),
   }),
   handler: async (data) => {
-    const { title, description, tags, userId, files } = data;
+    const { title, description, tags, userId, files, content, type } = data;
 
     try {
       const newBlog = await db
@@ -22,11 +24,11 @@ export const addResource = defineAction({
         .values({
           id: crypto.randomUUID(),
           user: userId,
-          tags: tags ? tags.join(",") : "",
+          tags: tags ? tags : "",
+          content: content ? content : "",
           description,
           isActive: true,
           title,
-          content: "", // Add appropriate content here
           createdAt: new Date(),
         })
         .returning();
@@ -45,7 +47,7 @@ export const addResource = defineAction({
             id: crypto.randomUUID(),
             blogId: newBlog[0].id,
             url: file,
-            type: "default", // Add appropriate type here
+            type: type ? type : "default",
           });
         }
       }
