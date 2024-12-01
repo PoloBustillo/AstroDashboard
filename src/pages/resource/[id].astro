@@ -52,7 +52,11 @@ const blogData = (await actions.getResourceById({ id: id as string }))
           <div class="lg:pr-4">
             <div class="lg:max-w-lg">
               <p class="text-base/7 font-semibold text-indigo-600">
-                {new Date(blogData.blog.createdAt).toLocaleDateString()}
+                {
+                  new Date(blogData.blog.createdAt).toLocaleString("en-US", {
+                    timeZone: "America/Mexico_City",
+                  })
+                }
               </p>
               <h1
                 class="mt-2 text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl"

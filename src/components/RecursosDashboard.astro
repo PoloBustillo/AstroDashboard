@@ -112,7 +112,10 @@ const resources = await actions.getAllBlogs();
                       </td>
                       <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         <data value="fecha">
-                          {new Date(resource.blog.createdAt).toLocaleString()}
+                          {new Date(resource.blog.createdAt).toLocaleString(
+                            "en-US",
+                            { timeZone: "America/Mexico_City" },
+                          )}
                         </data>
                       </td>
                       <td class="max-w-sm p-4 overflow-hidden text-base font-normal text-gray-500 truncate xl:max-w-xs dark:text-gray-400">

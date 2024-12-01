@@ -149,7 +149,9 @@ const users = (await actions.getAllUsers()).data;
                         </div>
                       </td>
                       <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {new Date(user.createdAt).toLocaleString()}
+                        {new Date(user.createdAt).toLocaleString("en-US", {
+                          timeZone: "America/Mexico_City",
+                        })}
                       </td>
                       <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         {user.role}

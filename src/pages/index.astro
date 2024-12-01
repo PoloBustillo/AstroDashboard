@@ -81,7 +81,10 @@ const session = await getSession(Astro.request);
                         {resource.user?.name ? resource.user.name : "Anónimo"}
                       </p>
                       <p class="text-gray-600 dark:text-gray-400">
-                        {new Date(resource.blog.createdAt).toLocaleString()}
+                        {new Date(resource.blog.createdAt).toLocaleString(
+                          "en-US",
+                          { timeZone: "America/Mexico_City" },
+                        )}
                       </p>
                     </div>
                   </div>

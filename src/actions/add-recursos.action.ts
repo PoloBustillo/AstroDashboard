@@ -35,7 +35,7 @@ export const addResource = defineAction({
           { collection: "blogNotifications", id: "blogNotification" },
         ],
         data: {
-          message: `El titulo ${title}, creado en ${new Date(newBlog[0].createdAt).toLocaleTimeString()}`,
+          message: `El titulo ${title}, creado en ${new Date(newBlog[0].createdAt).toLocaleString("en-US", { timeZone: "America/Mexico_City" })}`,
           primary_action_url: `/resource/${newBlog[0].id}`,
         },
       });
