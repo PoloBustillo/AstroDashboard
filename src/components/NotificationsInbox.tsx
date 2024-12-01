@@ -19,27 +19,27 @@ import type {
 } from "@knocklabs/react";
 
 const NotificationInbox = ({
-  user,
+  userId,
   feedId,
   apiKey,
 }: {
-  user: User;
+  userId: string;
   feedId: string;
   apiKey: string;
 }) => {
   const [colorTheme, setcolorTheme] = useState<ColorMode>("light");
-  const notifButtonRef = useRef<HTMLButtonElement>(null);
-  const [isVisible, setisVisible] = useState(false);
 
   useEffect(() => {
     const colorMode = localStorage.getItem("color-theme") || "light";
-    console.log("🚀 ~ useEffect ~ colorMode:", colorMode);
 
     setcolorTheme(colorMode as ColorMode);
   }, []);
 
   return (
-    <KnockProvider apiKey={apiKey} userId={user.id || ""}>
+    <KnockProvider
+      apiKey={apiKey}
+      userId={"c609008f-2646-49c8-83a6-7465f76884ef"}
+    >
       <KnockFeedProvider colorMode={colorTheme} feedId={feedId}>
         <>
           <NotificationFeed
@@ -64,7 +64,7 @@ const NotificationInbox = ({
                   <select
                     onChange={(e) => {
                       const filter = e.target.value as FilterStatus;
-                      console.log("Selected filter:", filter);
+
                       props.setFilterStatus(filter);
                     }}
                     className="bg-white dark:bg-gray-800 text-gray-700 dark:text-white border border-gray-300 dark:border-gray-600 rounded-md px-2 py-1"

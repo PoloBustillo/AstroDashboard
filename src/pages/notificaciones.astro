@@ -1,16 +1,22 @@
 ---
-import type { User } from "@auth/core/types";
 import NotificationInbox from "@components/NotificationsInbox";
 import LayoutSidebar from "@layouts/LayoutSidebar.astro";
 import { getSession } from "auth-astro/server";
 const session = await getSession(Astro.request);
 ---
 
+<script>
+  import Knock from "@knocklabs/client";
+  const knockClient = new Knock(import.meta.env.PUBLIC_KNOCK_PUBLIC_API_KEY);
+  // console.log("🚀 ~ user.id:", session?.user.id);
+  knockClient.authenticate("1");
+</script>
+
 <LayoutSidebar>
   <div class="h-min-[50vh] h-[50vh] py-8 lg:px-28 px-2">
     <NotificationInbox
       client:idle
-      user={session?.user ?? ({} as User)}
+      userId={session?.user.id ?? ""}
       apiKey={import.meta.env.PUBLIC_KNOCK_PUBLIC_API_KEY}
       feedId={import.meta.env.PUBLIC_KNOCK_FEED_CHANNEL_ID}
     />

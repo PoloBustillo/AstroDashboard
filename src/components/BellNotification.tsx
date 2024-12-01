@@ -9,7 +9,6 @@ import "@knocklabs/react/dist/index.css";
 
 import type { User } from "@auth/core/types";
 import { useEffect, useState, useRef } from "react";
-import type { ColorMode } from "@knocklabs/react";
 
 const BellNotification = ({
   user,
@@ -24,7 +23,10 @@ const BellNotification = ({
   const [isVisible, setisVisible] = useState(false);
 
   return (
-    <KnockProvider apiKey={apiKey} userId={"User-1"}>
+    <KnockProvider
+      apiKey={apiKey}
+      userId={user.id || "c609008f-2646-49c8-83a6-7465f76884ef"}
+    >
       <KnockFeedProvider feedId={feedId}>
         <>
           <div className="text-black dark:text-white">
