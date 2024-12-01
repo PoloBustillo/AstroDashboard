@@ -39,16 +39,12 @@ const NotificationInbox = ({
   }, []);
 
   return (
-    <KnockProvider apiKey={apiKey} userId={"User-1"}>
+    <KnockProvider apiKey={apiKey} userId={user.id || ""}>
       <KnockFeedProvider colorMode={colorTheme} feedId={feedId}>
         <>
           <NotificationFeed
             renderItem={({ item, ...props }) => (
-              <NotificationCell
-                {...props}
-                item={item}
-                avatar={<Avatar name={"Actor"} src={item.actors[0].avatar} />}
-              />
+              <NotificationCell {...props} item={item} />
             )}
             EmptyComponent={
               <div className="dark:text-white text-gray-500 flex items-center justify-center h-full dark:bg-gray-700">
