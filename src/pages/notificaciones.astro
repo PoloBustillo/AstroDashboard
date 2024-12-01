@@ -1,9 +1,18 @@
 ---
+import type { User } from "@auth/core/types";
+import NotificationInbox from "@components/NotificationsInbox";
 import LayoutSidebar from "@layouts/LayoutSidebar.astro";
+import { getSession } from "auth-astro/server";
+const session = await getSession(Astro.request);
 ---
 
 <LayoutSidebar>
-  <div class="min-h-screen m-3 align-middle flex pb-[12vh] text-white">
-    <h1>Notificaciones</h1>
+  <div class="h-min-[50vh] h-[50vh] py-8 lg:px-28 px-2">
+    <NotificationInbox
+      client:idle
+      user={session?.user ?? ({} as User)}
+      apiKey={import.meta.env.PUBLIC_KNOCK_PUBLIC_API_KEY}
+      feedId={import.meta.env.PUBLIC_KNOCK_FEED_CHANNEL_ID}
+    />
   </div>
 </LayoutSidebar>

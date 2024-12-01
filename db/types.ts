@@ -19,6 +19,7 @@ export type BlogType = {
   user: string;
   tags: string;
   description: string;
+  type: string;
   isActive: boolean;
   title: string;
   createdAt: Date;

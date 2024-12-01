@@ -5,6 +5,8 @@ import { getSession } from "auth-astro/server";
 import ProfileAvatar from "@components/ProfileAvatar.astro";
 import { Icon } from "astro-icon/components";
 import Logo from "@components/Logo.astro";
+import BellNotification from "@components/BellNotification";
+import type { User } from "@auth/core/types";
 const session = await getSession(Astro.request);
 ---
 
@@ -57,9 +59,14 @@ const session = await getSession(Astro.request);
             >
           </div>
         </div>
-
+        <BellNotification
+          client:idle
+          user={session?.user ?? ({} as User)}
+          apiKey={import.meta.env.PUBLIC_KNOCK_PUBLIC_API_KEY}
+          feedId={import.meta.env.PUBLIC_KNOCK_FEED_CHANNEL_ID}
+        />
         <!-- Notifications -->
-        <button
+        <!-- <button
           type="button"
           data-dropdown-toggle="notification-dropdown"
           class="p-2 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700"
@@ -68,7 +75,7 @@ const session = await getSession(Astro.request);
           <Icon width={25} height={25} name={"notification"} />
         </button>
         <!-- Dropdown menu -->
-        <div
+        <!-- <div
           class="z-50 hidden max-w-sm my-4 overflow-hidden text-base list-none bg-white divide-y divide-gray-100 rounded shadow-lg dark:divide-gray-600 dark:bg-gray-700"
           id="notification-dropdown"
         >
@@ -139,7 +146,7 @@ const session = await getSession(Astro.request);
               Ver Todas
             </div>
           </a>
-        </div>
+        </div> -->
 
         <ColorModeSwitcher />
 

@@ -7,6 +7,9 @@ import type { UserType } from "db/types";
 import { USER_ROLE } from "src/utils/constants";
 import { normalizeError } from "src/utils/methods";
 import { v4 as uuidv4 } from "uuid";
+import { Knock } from "@knocklabs/node";
+
+const knock = new Knock(import.meta.env.KNOCK_API_KEY);
 
 export const registerUser = defineAction({
   accept: "form",
@@ -39,9 +42,10 @@ export const registerUser = defineAction({
         role: USER_ROLE,
       } as UserType;
 
-      const result = await db.insert(User).values(newUser);
-      const { password: _, ...user } = newUser;
+      const result = (await db.insert(User).values(newUser)) as unknown;
 
+      const { password: _, ...user } = newUser;
+      await knock.users.identify(newUser.id, newUser);
       return { message: "Usuario creado exitosamente", user: user };
     } catch (error: unknown) {
       console.error("Error creating user", error);

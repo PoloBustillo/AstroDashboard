@@ -12,6 +12,9 @@ import { normalizeError } from "src/utils/methods";
 import type { UserType } from "db/types";
 import type { Profile } from "@auth/core/types";
 import { v4 as uuidv4 } from "uuid";
+import { Knock } from "@knocklabs/node";
+
+const knock = new Knock(import.meta.env.KNOCK_API_KEY);
 
 const checkIfUserExistsOrCreate = async (profile: Partial<Profile>) => {
   const existingUser = await db
@@ -48,6 +51,14 @@ const checkIfUserExistsOrCreate = async (profile: Partial<Profile>) => {
     } as UserType;
 
     await db.insert(User).values(user);
+    await knock.users.identify(user.id, user);
+    await knock.objects.addSubscriptions(
+      "blogNotifications",
+      "blogNotification",
+      {
+        recipients: [user.id],
+      },
+    );
 
     return {
       ...user,

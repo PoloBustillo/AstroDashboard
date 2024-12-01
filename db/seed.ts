@@ -1,5 +1,7 @@
 import { Blog, BlogResource, db, NOW, Role, User } from "astro:db";
 import bcrypt from "bcrypt";
+import { Knock } from "@knocklabs/node";
+const knock = new Knock(import.meta.env.KNOCK_API_KEY);
 
 export default async function seed() {
   const roles = [
@@ -40,6 +42,36 @@ export default async function seed() {
     },
   ];
 
+  await knock.users.identify("0", {
+    name: "SUDO",
+    email: "sudo@example.com",
+  });
+  await knock.users.identify("1", {
+    name: "Admin User",
+    email: "admin@example.com",
+  });
+  await knock.users.identify("2", {
+    name: "Regular User",
+    email: "user@example.com",
+  });
+  knock.objects.set("blogNotifications", "blogNotification", {
+    name: "TakitoCorp",
+  });
+  await knock.objects.addSubscriptions(
+    "blogNotifications",
+    "blogNotification",
+    {
+      recipients: ["0", "1", "2"],
+    },
+  );
+  // await knock.workflows.trigger("in-app", {
+  //   recipients: [{ collection: "blogNotifications", id: "blogNotification" }],
+  //   data: {
+  //     message: "Hola mundo",
+  //     primary_action_url: "/resource/1",
+  //     variableKey: "Preview data value",
+  //   },
+  // });
   await db.insert(User).values(users);
   const blogs = [
     {
@@ -126,11 +158,13 @@ export default async function seed() {
       id: "1",
       blogId: "1",
       url: "https://example.com/tech-blog",
+      type: "image",
     },
     {
       id: "2",
       blogId: "2",
       url: "https://example.com/lifestyle-blog",
+      type: "pdf",
     },
   ];
 
