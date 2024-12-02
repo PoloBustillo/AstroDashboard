@@ -73,6 +73,7 @@ const BellNotification = ({
                   </select>
                 </div>
                 <div>
+                  {/* TODO: implement it */}
                   <button
                     onClick={(e) => props.onMarkAllAsReadClick?.(e, [])}
                     className="text-blue-500"

@@ -164,7 +164,7 @@ export default async function seed() {
     {
       id: "1",
       blogId: "1",
-      url: "https://example.com/tech-blog",
+      url: "https://media.istockphoto.com/id/1450969748/photo/developer-working-with-new-program.jpg?s=612x612&w=0&k=20&c=FTq2MTCXwMTJxGCA_8o7516KFDaNZ0WCxdZR5M--KYs=",
       type: "image",
     },
     {

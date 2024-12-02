@@ -2,11 +2,17 @@
 import LayoutSidebar from "@layouts/LayoutSidebar.astro";
 import type { BlogData } from "@utils/types";
 import { actions } from "astro:actions";
-
+import { getSession } from "auth-astro/server";
 const { id } = Astro.params;
-
+const session = await getSession(Astro.request);
 const blogData = (await actions.getResourceById({ id: id as string }))
   .data as BlogData;
+
+//TODO: fix this
+if (blogData.blog.private && !session?.user.id) {
+  console.log("Redirecting to sign-in");
+  Astro.redirect("/");
+}
 ---
 
 <LayoutSidebar>
