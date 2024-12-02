@@ -77,6 +77,7 @@ export default async function seed() {
     {
       id: "1",
       user: "1",
+      private: false,
       tags: "tech, programming",
       description: "A blog about tech and programming",
       isActive: true,
@@ -88,6 +89,7 @@ export default async function seed() {
     {
       id: "2",
       user: "2",
+      private: true,
       tags: "lifestyle, health",
       description: "A blog about lifestyle and health",
       isActive: true,
@@ -99,6 +101,7 @@ export default async function seed() {
     {
       id: "3",
       user: "1",
+      private: false,
       tags: "travel, adventure",
       description: "A blog about travel and adventure",
       isActive: true,
@@ -110,6 +113,7 @@ export default async function seed() {
     {
       id: "4",
       user: "2",
+      private: false,
       tags: "food, recipes",
       description: "A blog about food and recipes",
       isActive: true,
@@ -121,6 +125,7 @@ export default async function seed() {
     {
       id: "5",
       user: "1",
+      private: false,
       tags: "fitness, wellness",
       description: "A blog about fitness and wellness",
       isActive: true,
@@ -132,6 +137,7 @@ export default async function seed() {
     {
       id: "6",
       user: "2",
+      private: false,
       tags: "finance, investing",
       description: "A blog about finance and investing",
       isActive: true,
@@ -143,6 +149,7 @@ export default async function seed() {
     {
       id: "7",
       user: "1",
+      private: false,
       tags: "education, learning",
       description: "A blog about education and learning",
       isActive: true,

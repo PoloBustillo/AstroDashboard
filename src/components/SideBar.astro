@@ -12,7 +12,7 @@ const links = [
     icon: "dashboard",
   },
   {
-    href: "/notificaciones",
+    href: "/protected/notificaciones",
     text: "Notificaciones",
     icon: "notifications",
   },
@@ -84,7 +84,7 @@ const { pathname } = Astro.url;
 
                   <span class="flex-1 ms-3">{link.text}</span>
 
-                  {link.href == "/notificaciones" && (
+                  {link.href == "/protected/notificaciones" && (
                     <div class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 rounded-full bg-blue-900 dark:text-blue-300 animate-blink">
                       <Badge
                         client:idle

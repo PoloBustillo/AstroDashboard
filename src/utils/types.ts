@@ -7,6 +7,7 @@ export interface Blog {
   id: string;
   user: string;
   tags: string;
+  private: boolean;
   content: string;
   description: string;
   isActive: boolean;

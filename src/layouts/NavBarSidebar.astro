@@ -58,12 +58,14 @@ const session = await getSession(Astro.request);
             >
           </div>
         </div>
-        <BellNotification
-          client:idle
-          user={session?.user ?? ({} as User)}
-          apiKey={import.meta.env.PUBLIC_KNOCK_PUBLIC_API_KEY}
-          feedId={import.meta.env.PUBLIC_KNOCK_FEED_CHANNEL_ID}
-        />
+        <div class="mr-2">
+          <BellNotification
+            client:idle
+            user={session?.user ?? ({} as User)}
+            apiKey={import.meta.env.PUBLIC_KNOCK_PUBLIC_API_KEY}
+            feedId={import.meta.env.PUBLIC_KNOCK_FEED_CHANNEL_ID}
+          />
+        </div>
         <!-- Notifications -->
         <!-- <button
           type="button"
