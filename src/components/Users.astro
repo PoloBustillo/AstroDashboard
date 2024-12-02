@@ -5,12 +5,48 @@ import NavPagination from "@components/NavPagination.astro";
 import { actions } from "astro:actions";
 import { getSession } from "auth-astro/server";
 import DrawerRemoveUser from "./DrawerRemoveUser.astro";
+type User = {
+  id: string;
+  name: string | null;
+  image: string | null;
+  email: string;
+  password: string | null;
+  isActive: boolean;
+  createdAt: Date;
+  role: string;
+};
 const session = await getSession(Astro.request);
 const isAdmin = session?.user.role === "superadmin";
-const users = (await actions.getAllUsers()).data;
+let users = (await actions.getAllUsers()).data ?? [];
+const query = Astro.url.searchParams.get("query") || "";
+if (query != "") {
+  console.log(query);
+
+  users = users.filter((user: User) =>
+    user.name?.toLowerCase().includes(query.toLowerCase()),
+  );
+}
 ---
 
-<div class:list={["block overflow-hidden shadow"]}>
+<script>
+  const addButton = document.querySelector(
+    'button[data-modal-toggle="add-user-modal"]',
+  );
+  if (addButton) {
+    addButton.addEventListener("click", () => {
+      const searchInputElement = document.getElementById("users-search");
+      const searchInput = searchInputElement
+        ? (searchInputElement as HTMLInputElement).value
+        : "";
+      if (searchInput) {
+        const url = new URL(window.location.href);
+        url.searchParams.set("query", searchInput);
+        window.location.href = url.toString();
+      }
+    });
+  }
+</script>
+<div class:list={["block overflow-hidden shadow my-6"]}>
   <div
     class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5 dark:bg-gray-800 dark:border-gray-700"
   >
@@ -27,11 +63,11 @@ const users = (await actions.getAllUsers()).data;
           class="items-center hidden mb-3 sm:flex sm:divide-x sm:divide-gray-100 sm:mb-0 dark:divide-gray-700"
         >
           <form class="lg:pr-3" action="#" method="GET">
-            <label for="users-search" class="sr-only">Search</label>
+            <label for="users-search" class="sr-only">Buscar</label>
             <div class="relative mt-1 lg:w-64 xl:w-96">
               <input
                 type="text"
-                name="email"
+                name="query"
                 id="users-search"
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 placeholder="Busca usuarios"
@@ -96,7 +132,7 @@ const users = (await actions.getAllUsers()).data;
               class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
             >
               {
-                (users ?? []).map((user) => (
+                (users ?? []).map((user: User) => (
                   <div>
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
                       <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">

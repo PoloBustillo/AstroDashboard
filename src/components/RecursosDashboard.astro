@@ -5,9 +5,93 @@ import DrawerAdd from "./DrawerAdd.astro";
 import DrawerEdit from "./DrawerEdit.astro";
 import DrawerRemove from "./DrawerRemove.astro";
 import { actions } from "astro:actions";
-const resources = await actions.getAllBlogs();
+
+let resources = await actions.getAllBlogs();
+
+const query = Astro.url.searchParams.get("query") || "";
+console.log("🚀 ~ query:", query);
+if (query != "") {
+  if (resources.data) {
+    resources.data = resources.data.filter((resource: any) =>
+      resource.blog.title.toLowerCase().includes(query.toLowerCase()),
+    );
+  }
+}
 ---
 
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const deleteButtons = document.querySelectorAll("#deleteProductButton");
+    deleteButtons.forEach((button) => {
+      const row = button.closest("tr");
+      if (row) {
+        const idElement = row.querySelector('data[value="id"]');
+        if (idElement) {
+          const resourceId = idElement.textContent
+            ? idElement.textContent.trim()
+            : "";
+          button.setAttribute("data-resource", resourceId);
+        }
+      }
+    });
+  });
+  //   const deleteDrawer = document.getElementById(
+  //     "drawer-delete-product-default",
+  //   );
+
+  //   if (deleteDrawer) {
+  //     deleteDrawer.addEventListener("show.bs.drawer", () => {
+  //       const resourceIdInput = deleteDrawer.querySelector(
+  //         'input[name="resourceId"]',
+  //       );
+  //       if (resourceIdInput) {
+  //         (resourceIdInput as HTMLInputElement).value = resourceId;
+  //       }
+  //     });
+  //   }
+  //   const deleteButtons = document.querySelectorAll("#deleteProductButton");
+  //   deleteButtons.forEach((button) => {
+  //     button.addEventListener("click", (event) => {
+  //       const target = event.target as HTMLElement | null;
+  //       let row;
+  //       if (target) {
+  //         row = target.closest("tr");
+  //       }
+  //       if (row) {
+  //         const idElement = row.querySelector('data[value="id"]');
+  //         if (idElement) {
+  //           resourceId = idElement.textContent
+  //             ? idElement.textContent.trim()
+  //             : "";
+  //           if (target) {
+  //             target.setAttribute("data-resource", resourceId);
+  //           }
+  //           console.log(`Resource ID to delete: ${resourceId}`);
+  //           // You can now use resourceId to perform the delete action
+  //         }
+  //       }
+  //     });
+  //   });
+  // });
+</script>
+<script>
+  const addButton = document.querySelector(
+    'button[data-modal-toggle="add-user-modal"]',
+  );
+  if (addButton) {
+    addButton.addEventListener("click", () => {
+      const searchInputElement = document.getElementById("products-search");
+      const searchInput = searchInputElement
+        ? (searchInputElement as HTMLInputElement).value
+        : "";
+      if (searchInput) {
+        const url = new URL(window.location.href);
+        url.searchParams.set("query", searchInput);
+        window.location.href = url.toString();
+      }
+    });
+  }
+</script>
 <div>
   <div
     class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5 dark:bg-gray-800 dark:border-gray-700"
@@ -27,13 +111,22 @@ const resources = await actions.getAllBlogs();
             <div class="relative w-48 mt-1 sm:w-64 xl:w-96">
               <input
                 type="text"
-                name="email"
+                name="query"
+                value={query ? query : ""}
                 id="products-search"
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 placeholder="Busca recursos"
               />
             </div>
           </form>
+          <button
+            type="button"
+            data-modal-target="add-user-modal"
+            data-modal-toggle="add-user-modal"
+            class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+          >
+            Buscar
+          </button>
         </div>
 
         <div class="flex items-center ml-auto space-x-2 sm:space-x-3">
@@ -141,6 +234,7 @@ const resources = await actions.getAllBlogs();
                       <td class="p-4 space-x-2 whitespace-nowrap">
                         <button
                           type="button"
+                          data-resource=""
                           id="deleteProductButton"
                           data-drawer-target="drawer-delete-product-default"
                           data-drawer-show="drawer-delete-product-default"

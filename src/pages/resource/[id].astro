@@ -7,8 +7,6 @@ const { id } = Astro.params;
 
 const blogData = (await actions.getResourceById({ id: id as string }))
   .data as BlogData;
-
-console.log(blogData);
 ---
 
 <LayoutSidebar>

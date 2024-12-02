@@ -5,6 +5,7 @@ import { getAllBlogs } from "./getall-recursos.action";
 import { getAllUsers } from "./getall-users.action";
 import { getResourceById } from "./get-recurso.action";
 import { isAdmin } from "./is-admin.action";
+import { deleteResource } from "./delete-recurso.action";
 
 export const server = {
   isAdmin,
@@ -14,4 +15,5 @@ export const server = {
   getAllBlogs,
   getAllUsers,
   getResourceById,
+  deleteResource,
 };
