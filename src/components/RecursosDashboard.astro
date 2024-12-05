@@ -37,49 +37,9 @@ if (query != "") {
       }
     });
   });
-  //   const deleteDrawer = document.getElementById(
-  //     "drawer-delete-product-default",
-  //   );
-
-  //   if (deleteDrawer) {
-  //     deleteDrawer.addEventListener("show.bs.drawer", () => {
-  //       const resourceIdInput = deleteDrawer.querySelector(
-  //         'input[name="resourceId"]',
-  //       );
-  //       if (resourceIdInput) {
-  //         (resourceIdInput as HTMLInputElement).value = resourceId;
-  //       }
-  //     });
-  //   }
-  //   const deleteButtons = document.querySelectorAll("#deleteProductButton");
-  //   deleteButtons.forEach((button) => {
-  //     button.addEventListener("click", (event) => {
-  //       const target = event.target as HTMLElement | null;
-  //       let row;
-  //       if (target) {
-  //         row = target.closest("tr");
-  //       }
-  //       if (row) {
-  //         const idElement = row.querySelector('data[value="id"]');
-  //         if (idElement) {
-  //           resourceId = idElement.textContent
-  //             ? idElement.textContent.trim()
-  //             : "";
-  //           if (target) {
-  //             target.setAttribute("data-resource", resourceId);
-  //           }
-  //           console.log(`Resource ID to delete: ${resourceId}`);
-  //           // You can now use resourceId to perform the delete action
-  //         }
-  //       }
-  //     });
-  //   });
-  // });
 </script>
 <script>
-  const addButton = document.querySelector(
-    'button[data-modal-toggle="add-user-modal"]',
-  );
+  const addButton = document.querySelector("#search-button");
   if (addButton) {
     addButton.addEventListener("click", () => {
       const searchInputElement = document.getElementById("products-search");
@@ -90,16 +50,20 @@ if (query != "") {
         const url = new URL(window.location.href);
         url.searchParams.set("query", searchInput);
         window.location.href = url.toString();
+      } else {
+        const url = new URL(window.location.href);
+        url.searchParams.delete("query");
+        window.location.href = url.toString();
       }
     });
   }
 </script>
-<div class="m-6">
+<div>
   <div
     class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5 dark:bg-gray-800 dark:border-gray-700"
   >
     <div class="w-full mb-1">
-      <div class="mb-4">
+      <div class="m-10">
         <h1
           class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white"
         >
@@ -123,8 +87,7 @@ if (query != "") {
           </form>
           <button
             type="button"
-            data-modal-target="add-user-modal"
-            data-modal-toggle="add-user-modal"
+            id="search-button"
             class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
           >
             Buscar
