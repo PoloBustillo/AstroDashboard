@@ -1,5 +1,6 @@
 ---
 import { getSession } from "auth-astro/server";
+import EditorComponent from "./EditorComponent";
 
 const session = await getSession(Astro.request);
 ---
@@ -13,6 +14,13 @@ const session = await getSession(Astro.request);
   var myDropzone = new Dropzone("#dropzoneform", {
     thumbnail: function (file, dataUrl) {
       if (file.previewElement) {
+        file.previewElement.style.background = "transparent";
+
+        file.previewElement.classList.add("dark:text-white");
+
+        const dzNameElement =
+          file.previewElement.querySelector("[data-dz-name]");
+
         file.previewElement.classList.remove("dz-file-preview");
         var images = file.previewElement.querySelectorAll(
           "[data-dz-thumbnail]",
@@ -59,6 +67,11 @@ const session = await getSession(Astro.request);
         access: "public",
         token: import.meta.env.PUBLIC_BLOB_READ_WRITE_TOKEN,
       });
+      const typeElement = document.getElementById("typeDropdown");
+      if (typeElement) {
+        typeElement.classList.remove("hidden");
+        typeElement.classList.add("block");
+      }
 
       uploadedFilesArray.push({ file, content: blob.url });
     } catch (error) {
@@ -123,13 +136,21 @@ const session = await getSession(Astro.request);
   if (mainForm) {
     mainForm.addEventListener("submit", async (event) => {
       event.preventDefault();
+      const formData = new FormData(event.target as HTMLFormElement);
+      const dataElement = document.getElementById("data");
+      if (dataElement) {
+        const dataJson = dataElement.getAttribute("data-json");
+        if (dataJson) {
+          const data = JSON.parse(dataJson);
+          console.log(data);
+        }
+      }
 
       const target = event.target as HTMLFormElement;
-      const id = target.dataset.id ?? "";
-
+      const id = (target.dataset.id ?? "") as string;
+      console.log("🚀 ~ mainForm.addEventListener ~ id:", id);
       const btnSubmit = document.querySelector("#btnSubmit");
       btnSubmit?.setAttribute("disabled", "disabled");
-      const formData = new FormData(event.target as HTMLFormElement);
 
       const title = formData.get("title") as string;
       const description = formData.get("description") as string;
@@ -146,6 +167,8 @@ const session = await getSession(Astro.request);
         type,
         files: uploadedFilesArray.map((f) => f.content),
       });
+      console.log("🚀 ~ mainForm.addEventListener ~ data:", data);
+      console.log("🚀 ~ mainForm.addEventListener ~ error:", error);
 
       uploadedFilesArray.length = 0;
       myDropzone.removeAllFiles(true);
@@ -162,7 +185,7 @@ const session = await getSession(Astro.request);
 
 <div
   id="drawer-create-product-default"
-  class="fixed top-0 right-0 z-40 w-full h-screen max-w-xs p-4 overflow-y-auto transition-transform translate-x-full bg-white dark:bg-gray-800"
+  class="fixed top-0 right-0 z-40 w-full h-screen max-w-sm p-4 overflow-y-auto transition-transform translate-x-full bg-white dark:bg-gray-800"
   tabindex="-1"
   aria-labelledby="drawer-label"
   aria-hidden="true"
@@ -195,10 +218,10 @@ const session = await getSession(Astro.request);
   </button>
   <div
     id="dropzone"
-    class="w-full p-4 my-4 bg-white rounded-lg shadow-lg dark:bg-gray-800"
+    class="w-full p-4 my-4 rounded-lg shadow-3d bg-gray-50 dark:bg-gray-800 border border-dashed border-gray-300 dark:border-gray-600"
   >
     <form
-      class="dropzone m-auto text-center rounded-lg p-4 shadow-md"
+      class="dropzone m-auto text-center rounded-lg p-4 shadow-3d border-none bg-gray-50 dark:bg-gray-800"
       id="dropzoneform"
       action="#"
     >
@@ -217,6 +240,14 @@ const session = await getSession(Astro.request);
     data-id={session?.user.idUser}
     data-email={session?.user.email}
   >
+    <div>
+      <label
+        for="content"
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        >Contenido</label
+      >
+      <EditorComponent client:idle />
+    </div>
     <div class="space-y-4">
       <div>
         <label
@@ -276,7 +307,7 @@ const session = await getSession(Astro.request);
           required=""></textarea>
       </div>
 
-      <div>
+      <div id="typeDropdown" class="hidden">
         <label
           for="type"
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -285,9 +316,10 @@ const session = await getSession(Astro.request);
         <select
           id="type"
           name="type"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+          class="bg-gray-50 border block border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
           required=""
         >
+          <option value="none">Ninguno</option>
           <option value="pdf">PDF</option>
           <option value="image">Imagen</option>
           <option value="url">URL</option>

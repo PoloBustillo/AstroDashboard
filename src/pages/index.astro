@@ -3,7 +3,6 @@ import LayoutSidebar from "@layouts/LayoutSidebar.astro";
 import type { BlogData } from "@utils/types";
 import { actions } from "astro:actions";
 import { getSession } from "auth-astro/server";
-import EditorComponent from "@components/EditorComponent.tsx";
 
 const resources = (await actions.getAllBlogs()).data as BlogData[];
 const users = await actions.getAllUsers();
@@ -19,6 +18,7 @@ const resourcesWithUser = await Promise.all(
     return { ...resource, user: user };
   }),
 );
+console.log("🚀 ~ resourcesWithUser:", resourcesWithUser);
 
 async function fetchImages(resources: BlogData[]) {
   const clientId = "KDA53jGTYRZLPYTYshm2-W5nLtOq77gM8d4UWRX6YO4";
@@ -40,9 +40,6 @@ const session = await getSession(Astro.request);
 ---
 
 <LayoutSidebar>
-  <div class="m-6 bg-white p-10">
-    <EditorComponent client:idle />
-  </div>
   <div class="lg:m-3 m-2 align-middle flex lg:pb-[12vh]">
     <div class="flex flex-wrap max-h-[100%] justify-center lg:m-6 m-2">
       {

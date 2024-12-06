@@ -14,7 +14,7 @@ export default async function seed() {
 
   const users = [
     {
-      id: "0",
+      id: "550e8400-e29b-41d4-a716-446655440000",
       name: "SUDO",
       email: "sudo@example.com",
       password: await bcrypt.hash("1234567", 10),
@@ -23,7 +23,7 @@ export default async function seed() {
       role: "superadmin",
     },
     {
-      id: "1",
+      id: "550e8400-e29b-41d4-a716-446655440001",
       name: "Admin User",
       email: "admin@example.com",
       password: await bcrypt.hash("adminpassword", 10),
@@ -32,7 +32,7 @@ export default async function seed() {
       role: "admin",
     },
     {
-      id: "2",
+      id: "550e8400-e29b-41d4-a716-446655440002",
       name: "Regular User",
       email: "user@example.com",
       password: await bcrypt.hash("userpassword", 10),
@@ -42,15 +42,15 @@ export default async function seed() {
     },
   ];
 
-  await knock.users.identify("0", {
+  await knock.users.identify("550e8400-e29b-41d4-a716-446655440000", {
     name: "SUDO",
     email: "sudo@example.com",
   });
-  await knock.users.identify("1", {
+  await knock.users.identify("550e8400-e29b-41d4-a716-446655440001", {
     name: "Admin User",
     email: "admin@example.com",
   });
-  await knock.users.identify("2", {
+  await knock.users.identify("550e8400-e29b-41d4-a716-446655440002", {
     name: "Regular User",
     email: "user@example.com",
   });
@@ -61,7 +61,11 @@ export default async function seed() {
     "blogNotifications",
     "blogNotification",
     {
-      recipients: ["0", "1", "2"],
+      recipients: [
+        "550e8400-e29b-41d4-a716-446655440000",
+        "550e8400-e29b-41d4-a716-446655440001",
+        "550e8400-e29b-41d4-a716-446655440002",
+      ],
     },
   );
   // await knock.workflows.trigger("in-app", {
@@ -76,7 +80,7 @@ export default async function seed() {
   const blogs = [
     {
       id: "1",
-      user: "1",
+      user: "550e8400-e29b-41d4-a716-446655440001",
       private: false,
       tags: "tech, programming",
       description: "A blog about tech and programming",
@@ -88,7 +92,7 @@ export default async function seed() {
     },
     {
       id: "2",
-      user: "2",
+      user: "550e8400-e29b-41d4-a716-446655440002",
       private: true,
       tags: "lifestyle, health",
       description: "A blog about lifestyle and health",
@@ -100,7 +104,7 @@ export default async function seed() {
     },
     {
       id: "3",
-      user: "1",
+      user: "550e8400-e29b-41d4-a716-446655440001",
       private: false,
       tags: "travel, adventure",
       description: "A blog about travel and adventure",
@@ -112,7 +116,7 @@ export default async function seed() {
     },
     {
       id: "4",
-      user: "2",
+      user: "550e8400-e29b-41d4-a716-446655440000",
       private: false,
       tags: "food, recipes",
       description: "A blog about food and recipes",
@@ -124,7 +128,7 @@ export default async function seed() {
     },
     {
       id: "5",
-      user: "1",
+      user: "550e8400-e29b-41d4-a716-446655440001",
       private: false,
       tags: "fitness, wellness",
       description: "A blog about fitness and wellness",
@@ -136,7 +140,7 @@ export default async function seed() {
     },
     {
       id: "6",
-      user: "2",
+      user: "550e8400-e29b-41d4-a716-446655440000",
       private: false,
       tags: "finance, investing",
       description: "A blog about finance and investing",
@@ -148,7 +152,7 @@ export default async function seed() {
     },
     {
       id: "7",
-      user: "1",
+      user: "550e8400-e29b-41d4-a716-446655440000",
       private: false,
       tags: "education, learning",
       description: "A blog about education and learning",
