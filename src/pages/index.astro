@@ -40,14 +40,14 @@ const session = await getSession(Astro.request);
 ---
 
 <LayoutSidebar>
-  <div class="lg:m-3 m-2 align-middle flex lg:pb-[12vh]">
-    <div class="flex flex-wrap max-h-[100%] justify-center lg:m-6 m-2">
+  <div class="lg:m-2 m-2 align-middle flex lg:pb-[12vh]">
+    <div class="flex flex-wrap max-h-[100%] justify-center lg:m-4 m-2">
       {
         resourcesWithUser &&
           resourcesWithUser.map((resource, index: number) => {
             return (
               <div
-                class="lg:w-[25%] max-h-[100%] sm:w-[40%] lg:m-6 m-2 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 transition duration-300 ease-in-out transform hover:scale-105 dark:hover:bg-[rgba(26,26,26,0.6)] hover:backdrop-blur-[80px] hover:shadow-lg hover:shadow-blue-500/50 hover:bg-gray-100"
+                class="xl:w-[25%] max-h-[100%] sm:w-[40%] lg:m-6 m-2 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 transition duration-300 ease-in-out transform hover:scale-105 dark:hover:bg-[rgba(26,26,26,0.6)] hover:backdrop-blur-[80px] hover:shadow-lg hover:shadow-blue-500/50 hover:bg-gray-100"
                 onmouseover="this.style.boxShadow='0 4px 8px 0 rgba(0, 0, 255, 0.2), 0 6px 20px 0 rgba(0, 0, 255, 0.19)'; this.querySelector('.blob').style.opacity='1'"
                 onmouseout="this.style.boxShadow=''; this.querySelector('.blob').style.opacity='0'"
               >

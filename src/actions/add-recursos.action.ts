@@ -13,10 +13,10 @@ export const addResource = defineAction({
     files: z.array(z.string()).optional(),
     tags: z.string().optional(),
     type: z.string().optional(),
-    content: z.string().optional(),
+    contentJson: z.string().optional(),
   }),
   handler: async (data) => {
-    const { title, description, tags, userId, files, content, type } = data;
+    const { title, description, tags, userId, files, type, contentJson } = data;
 
     try {
       const newBlog = await db
@@ -25,7 +25,7 @@ export const addResource = defineAction({
           id: crypto.randomUUID(),
           user: userId,
           tags: tags ? tags : "",
-          content: content ? content : "",
+          content: contentJson ? contentJson : "",
           description,
           isActive: true,
           title,

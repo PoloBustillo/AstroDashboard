@@ -3,6 +3,8 @@ import LayoutSidebar from "@layouts/LayoutSidebar.astro";
 import type { BlogData } from "@utils/types";
 import { actions } from "astro:actions";
 import { getSession } from "auth-astro/server";
+
+import EditorContent from "@components/EditorContent";
 const { id } = Astro.params;
 const session = await getSession(Astro.request);
 const blogData = (await actions.getResourceById({ id: id as string }))
@@ -49,73 +51,67 @@ if (blogData.blog.private && !session?.user.id) {
             fill="url(#e813992c-7d03-4cc4-a2bd-151760b470a0)"></rect>
         </svg>
       </div>
-      <div
-        class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10"
-      >
-        <div
-          class="lg:col-span-2 lg:col-start-1 lg:row-start-1 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8"
-        >
-          <div class="lg:pr-4">
-            <div class="lg:max-w-lg">
-              <p class="text-base/7 font-semibold text-indigo-600">
-                {
-                  new Date(blogData.blog.createdAt).toLocaleString("en-US", {
-                    timeZone: "America/Mexico_City",
-                  })
-                }
-              </p>
-              <h1
-                class="mt-2 text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl"
-              >
-                {blogData.blog.title}
-              </h1>
-              <p class="mt-6 text-xl/8 text-gray-700">
-                {blogData.blog.description}
-              </p>
+      {
+        (
+          //TODO: if no resource then take all screen}
+          <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
+            <div class="lg:col-span-2 lg:col-start-1 lg:row-start-1 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
+              <div class="lg:pr-4">
+                <div class="lg:max-w-lg">
+                  <p class="text-base/7 font-semibold text-indigo-600">
+                    {new Date(blogData.blog.createdAt).toLocaleString("en-US", {
+                      timeZone: "America/Mexico_City",
+                    })}
+                  </p>
+                  <h1 class="mt-2 text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+                    {blogData.blog.title}
+                  </h1>
+                  <p class="mt-6 text-xl/8 text-gray-700 bg-yellow-100 p-4 rounded-md shadow-md">
+                    {blogData.blog.description}
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        {
-          blogData.blogResources.map((resource) => {
-            return (
-              <>
-                {resource.type === "image" && (
-                  <div class="-ml-12 -mt-12 p-12 lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden">
-                    <img
-                      class="w-[48rem] max-w-none rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem]"
-                      src={resource.url}
-                      alt={resource.type}
-                    />
-                  </div>
-                )}
-                {resource.type === "pdf" && (
-                  <div class="-ml-12 mt-12 p-12 lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden">
-                    <div class="flex justify-center">
-                      <iframe
-                        class="w-full h-[48rem] max-w-none rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem]"
+            {blogData.blogResources.map((resource) => {
+              return (
+                <>
+                  {resource.type === "image" && (
+                    <div class="-ml-12 -mt-12 p-12 lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden">
+                      <img
+                        class="w-[140%] max-w-none rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10 sm:w-[140%] object-contain"
                         src={resource.url}
-                        title={resource.type}
+                        alt={resource.type}
                       />
                     </div>
-                  </div>
-                )}
-              </>
-            );
-          })
-        }
+                  )}
+                  {resource.type === "pdf" && (
+                    <div class="-ml-12 mt-12 p-12 lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden">
+                      <div class="flex justify-center">
+                        <iframe
+                          class="w-full h-[48rem] max-w-none rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem]"
+                          src={resource.url}
+                          title={resource.type}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </>
+              );
+            })}
 
-        <div
-          class="lg:col-span-2 lg:col-start-1 lg:row-start-2 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8"
-        >
-          <div class="lg:pr-4">
-            <div class="max-w-xl text-base/7 text-gray-700 lg:max-w-lg">
-              <p>
-                {blogData.blog.content}
-              </p>
+            <div class="lg:col-span-2 lg:col-start-1 lg:row-start-2 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
+              <div class="lg:pr-4">
+                <div class="max-w-xl text-base/7 text-gray-700 lg:max-w-lg">
+                  <EditorContent data={blogData.blog.content} client:only />
+                </div>
+                <div class="mt-96">
+                  <code> {blogData.blog.content}</code>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        )
+      }
     </div>
   </div>
 </LayoutSidebar>

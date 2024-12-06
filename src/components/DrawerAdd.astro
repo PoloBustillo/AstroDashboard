@@ -138,12 +138,9 @@ const session = await getSession(Astro.request);
       event.preventDefault();
       const formData = new FormData(event.target as HTMLFormElement);
       const dataElement = document.getElementById("data");
+      let dataJson = "";
       if (dataElement) {
-        const dataJson = dataElement.getAttribute("data-json");
-        if (dataJson) {
-          const data = JSON.parse(dataJson);
-          console.log(data);
-        }
+        dataJson = dataElement.getAttribute("data-json") || "";
       }
 
       const target = event.target as HTMLFormElement;
@@ -163,10 +160,11 @@ const session = await getSession(Astro.request);
         description,
         userId: id,
         tags,
-        content,
+        contentJson: dataJson,
         type,
         files: uploadedFilesArray.map((f) => f.content),
       });
+      //TODO: handle error for schema validation
       console.log("🚀 ~ mainForm.addEventListener ~ data:", data);
       console.log("🚀 ~ mainForm.addEventListener ~ error:", error);
 
@@ -240,7 +238,7 @@ const session = await getSession(Astro.request);
     data-id={session?.user.idUser}
     data-email={session?.user.email}
   >
-    <div>
+    <div class="space-y-4 my-4">
       <label
         for="content"
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -292,19 +290,6 @@ const session = await getSession(Astro.request);
           placeholder="Etiquetas del recurso"
           required=""
         />
-      </div>
-      <div>
-        <label
-          for="content"
-          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >Contenido</label
-        >
-        <textarea
-          name="content"
-          id="content"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-          placeholder="Contenido del recurso"
-          required=""></textarea>
       </div>
 
       <div id="typeDropdown" class="hidden">

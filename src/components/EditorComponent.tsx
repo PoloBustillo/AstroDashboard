@@ -3,6 +3,8 @@ import Highlight from "@tiptap/extension-highlight";
 import TextAlign from "@tiptap/extension-text-align";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import Dropcursor from "@tiptap/extension-dropcursor";
+import Image from "@tiptap/extension-image";
 import {
   LuAlignCenter,
   LuAlignJustify,
@@ -13,6 +15,7 @@ import {
   LuHeading2,
   LuHeading3,
   LuHighlighter,
+  LuImagePlus,
   LuItalic,
   LuStrikethrough,
 } from "react-icons/lu";
@@ -22,7 +25,13 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
   if (!editor) {
     return null;
   }
+  const addImage = () => {
+    const url = window.prompt("URL");
 
+    if (url) {
+      editor.chain().focus().setImage({ src: url }).run();
+    }
+  };
   return (
     <div className="control-group">
       <div className="button-group"></div>
@@ -122,6 +131,12 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       >
         <LuAlignJustify />
       </button>
+      <button
+        className={`bg-blue-500 dark:bg-blue-900 text-white p-2 rounded border border-blue-700`}
+        onClick={addImage}
+      >
+        <LuImagePlus />
+      </button>
     </div>
   );
 };
@@ -150,6 +165,8 @@ export default () => {
         types: ["heading", "paragraph"],
       }),
       Highlight,
+      Image,
+      Dropcursor,
     ],
   });
 
@@ -158,7 +175,7 @@ export default () => {
       <div className="fixed top-0 left-0 right-0 bg-gray-800 p-4 shadow-md z-10 flex justify-center">
         <MenuBar editor={editor} />
       </div>
-      <div className="h-min-[30vh] m-4 p-4 border-dashed border-2 border-sky-500  ">
+      <div className="h-min-[30vh]  p-4 border border-dashed border-gray-300 dark:border-gray-600  ">
         <EditorContent editor={editor} />
       </div>
       <span className="hidden " id="data"></span>
