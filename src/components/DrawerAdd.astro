@@ -63,15 +63,17 @@ const session = await getSession(Astro.request);
 
   myDropzone.on("addedfile", async function (file) {
     try {
+      const typeElement = document.getElementById("typeDropdown");
+      console.log("🚀 ~ typeElement:", typeElement);
+      if (typeElement) {
+        console.log("🚀 ~ typeElement 2:", typeElement);
+        typeElement.classList.add("block");
+        typeElement.classList.remove("hidden");
+      }
       const blob = await put(`folder/${file.name}`, file, {
         access: "public",
         token: import.meta.env.PUBLIC_BLOB_READ_WRITE_TOKEN,
       });
-      const typeElement = document.getElementById("typeDropdown");
-      if (typeElement) {
-        typeElement.classList.remove("hidden");
-        typeElement.classList.add("block");
-      }
 
       uploadedFilesArray.push({ file, content: blob.url });
     } catch (error) {
@@ -145,7 +147,7 @@ const session = await getSession(Astro.request);
 
       const target = event.target as HTMLFormElement;
       const id = (target.dataset.id ?? "") as string;
-      console.log("🚀 ~ mainForm.addEventListener ~ id:", id);
+
       const btnSubmit = document.querySelector("#btnSubmit");
       btnSubmit?.setAttribute("disabled", "disabled");
 

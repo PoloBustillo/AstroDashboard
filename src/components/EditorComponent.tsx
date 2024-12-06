@@ -140,7 +140,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
     </div>
   );
 };
-//TODO: Pass variable from Client
+
 export default () => {
   const editor = useEditor({
     immediatelyRender: false,
