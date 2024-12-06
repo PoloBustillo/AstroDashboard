@@ -11,7 +11,7 @@ const isAdmin = session?.user.role === "superadmin";
 let resources = await actions.getAllBlogs();
 
 const query = Astro.url.searchParams.get("query") || "";
-console.log("🚀 ~ query:", query);
+
 if (query != "") {
   if (resources.data) {
     resources.data = resources.data.filter((resource: any) =>
@@ -34,6 +34,35 @@ if (query != "") {
             : "";
           button.setAttribute("data-resource", resourceId);
         }
+      }
+    });
+    const updateButtons = document.querySelectorAll("#updateProductButton");
+    updateButtons.forEach((button) => {
+      const row = button.closest("tr");
+      if (row) {
+        const idElement = row.querySelector('data[value="id"]');
+        const nameElement = row.querySelector('data[value="name"]');
+
+        const descriptionElement = row.querySelector(
+          'data[value="description"]',
+        );
+        const contentElement = row.querySelector('data[value="content"]');
+        const fechaElement = row.querySelector('data[value="fecha"]');
+        const tagsElement = row.querySelector('data[value="tags"]');
+        const isActiveElement = row.querySelector('data[value="isActive"]');
+
+        const resourceData = {
+          id: idElement?.textContent?.trim() || "",
+          name: nameElement?.textContent?.trim() || "",
+          description: descriptionElement?.textContent
+            ? descriptionElement.textContent.trim()
+            : "",
+          fecha: fechaElement?.textContent?.trim() || "",
+          tags: tagsElement?.textContent ? tagsElement.textContent.trim() : "",
+          isActive: isActiveElement?.textContent?.trim() || "",
+          content: contentElement?.textContent?.trim() || "",
+        };
+        button.setAttribute("data-resource", JSON.stringify(resourceData));
       }
     });
   });
@@ -131,22 +160,16 @@ if (query != "") {
             <thead class="bg-gray-100 dark:bg-gray-700">
               <tr>
                 {
-                  [
-                    "Titulo",
-                    "Fecha",
-                    "ID",
-                    "Activo",
-                    "TAGS",
-                    "Usuario",
-                    "Acciones",
-                  ].map((th) => (
-                    <th
-                      scope="col"
-                      class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400"
-                    >
-                      {th}
-                    </th>
-                  ))
+                  ["Titulo", "Fecha", "Activo", "TAGS", "Acciones"].map(
+                    (th) => (
+                      <th
+                        scope="col"
+                        class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400"
+                      >
+                        {th}
+                      </th>
+                    ),
+                  )
                 }
               </tr>
             </thead>
@@ -157,12 +180,15 @@ if (query != "") {
               {
                 resources.data &&
                   resources.data.map((resource) => (
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-700 max-w-[20%]">
+                      <td class=" hidden ">
+                        <data value="content"> {resource.blog.content}</data>
+                      </td>
                       <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
                         <div class="text-base font-semibold text-gray-900 dark:text-white">
                           <data value="name">{resource.blog.title}</data>
                         </div>
-                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                        <div class="text-sm  max-w-[20%] font-normal text-gray-500 dark:text-gray-400">
                           <data value="description">
                             {resource.blog.description}
                           </data>
@@ -176,24 +202,23 @@ if (query != "") {
                           )}
                         </data>
                       </td>
-                      <td class="max-w-sm p-4 overflow-hidden text-base font-normal text-gray-500 truncate xl:max-w-xs dark:text-gray-400">
+                      <td class=" hidden max-w-sm p-4 overflow-hidden text-base font-normal text-gray-500 truncate xl:max-w-xs dark:text-gray-400">
                         <data value="id"> {resource.blog.id}</data>
                       </td>
                       <td class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">
-                        <div class="flex items-center">
-                          {resource.blog.isActive ? (
-                            <div class="h-2.5 w-2.5 rounded-full bg-green-400 mr-2" />
-                          ) : (
-                            <div class="h-2.5 w-2.5 rounded-full bg-red-500 mr-2" />
-                          )}
-                          {resource.blog.isActive}
-                        </div>
+                        <data value="isActive">
+                          <div class="flex items-center">
+                            {resource.blog.isActive ? (
+                              <div class="h-2.5 w-2.5 rounded-full bg-green-400 mr-2" />
+                            ) : (
+                              <div class="h-2.5 w-2.5 rounded-full bg-red-500 mr-2" />
+                            )}
+                            {resource.blog.isActive}
+                          </div>
+                        </data>
                       </td>
                       <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         <data value="tags"> {resource.blog.tags}</data>
-                      </td>
-                      <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        <data value="usuarios"> {resource.blog.user}</data>
                       </td>
 
                       <td class="p-4 space-x-2 whitespace-nowrap">
@@ -224,6 +249,35 @@ if (query != "") {
                             />
                           </svg>
                           Eliminar
+                        </button>
+                        <button
+                          type="button"
+                          disabled={!isAdmin}
+                          data-resource=""
+                          id="updateProductButton"
+                          data-drawer-target="drawer-update-product-default"
+                          data-drawer-show="drawer-update-product-default"
+                          aria-controls="drawer-update-product-default"
+                          data-drawer-placement="right"
+                          class:list={[
+                            "inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-blue-900",
+                            { "cursor-not-allowed opacity-60": !isAdmin },
+                          ]}
+                        >
+                          <svg
+                            class="w-4 h-4 mr-2"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828zM6 12v2h2l6.586-6.586-2-2L6 12z"
+                              clip-rule="evenodd"
+                            />
+                            <path d="M4 16h12a1 1 0 110 2H4a1 1 0 110-2z" />
+                          </svg>
+                          Actualizar
                         </button>
                       </td>
                     </tr>
